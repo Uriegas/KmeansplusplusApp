@@ -21,7 +21,7 @@ public class Kmeans {
 		List<Centroid> centroids = get_random_centroids(data, k); //Random centroids
 		// List<Centroid> centroids = get_centroids(data, k); //Kmeans++ centroids
 
-		while()
+		// while()
 		return centroids;
 	}
 	/**

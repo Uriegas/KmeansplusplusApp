@@ -12,12 +12,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="399.0" prefWidth="686.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="399.0" prefWidth="686.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uriegas.FXMLController">
    <bottom>
       <Label fx:id="label" minHeight="16" minWidth="69" text="©Uriegas International" BorderPane.alignment="CENTER" />
    </bottom>
    <center>
-      <TableView BorderPane.alignment="CENTER">
+      <TableView fx:id="table" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn prefWidth="75.0" text="C1" />
           <TableColumn prefWidth="75.0" text="C2" />
@@ -35,19 +35,19 @@
          <children>
             <HBox prefWidth="200.0">
                <children>
-                  <Button fx:id="button" onAction="#handleButtonAction" text="Load File">
+                  <Button fx:id="loadFile" text="Load File">
                      <HBox.margin>
                         <Insets left="5.0" right="6.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" text="Process">
+                  <Button fx:id="applyKmeans" mnemonicParsing="false" text="Process">
                      <HBox.margin>
                         <Insets left="6.0" right="6.0" />
                      </HBox.margin>
                   </Button>
                </children>
             </HBox>
-            <ListView prefWidth="77.0">
+            <ListView fx:id="lastViewed" prefWidth="77.0">
                <padding>
                   <Insets left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -71,7 +71,10 @@
                </HBox.margin>
             </Text>
             <Separator prefWidth="1000.0" />
-            <Button mnemonicParsing="false" text="+" />
+            <Button mnemonicParsing="false" text="+">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
+               </HBox.margin></Button>
          </children>
       </HBox>
    </top>
