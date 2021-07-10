@@ -7,6 +7,7 @@ import javafx.collections.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.*;
 import javafx.stage.*;
 /**
@@ -82,12 +83,20 @@ public class FXMLController implements Initializable {
         FileChooser fiChooser = new FileChooser();
         fiChooser.setTitle("Select a data file(csv/xlsx)");
         File file = fiChooser.showOpenDialog( null );
-        //TODO: verify extension
+        if( !(file.getName().endsWith(".xlsx") || file.getName().endsWith(".csv")) ){
+            Alert error = new Alert(AlertType.ERROR);
+            error.setTitle("Wrong file type");
+            error.setHeaderText("The file " + file.getName() + " is not valid");
+            error.show();
+            e.consume();
+        }
         //<--Select file
 
         //-->Load file
-        this.model.setFile(file);
-        System.out.println("Load file " + file.getName());
+        else{
+            this.model.setFile(file);
+            System.out.println("Load file " + file.getName());
+        }
         //<--Load file
     }
 }
