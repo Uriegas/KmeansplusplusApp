@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+    <content>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0">
+         <children>
+            <Text layoutX="32.0" layoutY="13.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Links importantes: https://github.com/UPV-Programacion-Orientada-a-Objetos/poo-unidad-3-actividad-1-Uriegas" wrappingWidth="416.7294921875" />
+         </children></AnchorPane>
+    </content>
+    <expandableContent>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
+    </expandableContent>
+   <header>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Text layoutX="199.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kmeans App" />
+            <Text layoutX="23.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Esta aplicacion se basa en el algoritmo Kmeans++ usando multithreading" wrappingWidth="434.7294921875" />
+         </children>
+      </AnchorPane>
+   </header>
+</DialogPane>

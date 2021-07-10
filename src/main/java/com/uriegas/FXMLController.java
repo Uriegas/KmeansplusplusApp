@@ -6,6 +6,8 @@ import java.util.*;
 import javafx.collections.*;
 import javafx.event.*;
 import javafx.fxml.*;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.*;
@@ -35,42 +37,72 @@ public class FXMLController implements Initializable {
         table.setItems(this.model.tableProperty());
         currentFile.textProperty().bindBidirectional(this.model.currentFileProperty());
         //<--Data binding
+
+        //-->Event Handling
         lastViewed.setOnMouseClicked(event -> {
             if( event.getButton().equals(MouseButton.PRIMARY) )
                 if( event.getClickCount() == 2 )
                     this.model.setFile(lastViewed.getSelectionModel().getSelectedItem());
         });
-        // loadFile.setOnMouseClicked(new EventHandler<MouseEvent>(){//When loadFile is clicked
-        //     final Table table = new Table();
-        //     @Override public void handle(MouseEvent e){
-        //         //-->Select file
-        //         FileChooser fiChooser = new FileChooser();
-        //         fiChooser.setTitle("Select a data file(csv/xlsx)");
-        //         File file = fiChooser.showOpenDialog( null );
-        //         //<--Select file
+        loadFile.setOnMouseClicked(e ->{ //When loadFile is clicked
+            //-->Select file
+            FileChooser fiChooser = new FileChooser();
+            fiChooser.setTitle("Select a data file(csv/xlsx)");
+            File file = fiChooser.showOpenDialog( null );
+            if( !(file.getName().endsWith(".xlsx") || file.getName().endsWith(".csv")) ){
+                Alert error = new Alert(AlertType.ERROR);
+                error.setTitle("Wrong file type");
+                error.setHeaderText("The file " + file.getName() + " has not a valid format");
+                error.show();
+                e.consume();
+            }
+            //<--Select file
 
-        //         //-->Load file
-        //         this.model.setFile(file);
-        //         System.out.println("Load file " + file.getName());
-        //         //<--Load file
-        //     }
-        // });
-        applyKmeans.setOnMouseClicked(new EventHandler<MouseEvent>(){//When kmeans is clicked
-            @Override public void handle(MouseEvent e){
+            //-->Load file
+            else{
+                this.model.setFile(file);
+                System.out.println("Load file " + file.getName());
+            }
+            //<--Load file
+        });
+        applyKmeans.setOnMouseClicked(e ->{//When kmeans is clicked
                 //-->Show: select k dialog
                 //<--Show: select k dialog
                 //-->Show kmeas++ aggrupation
                 //<--Show kmeas++ aggrupation
                 System.out.println("apply kmeans clicked");
-            }
         });
-        about.setOnMouseClicked(new EventHandler<MouseEvent>(){//When about is clicked
-            @Override public void handle(MouseEvent e){//Show explanation of the program
+        //TODO The about pop up doesn't close
+        about.setOnMouseClicked(e ->{//When about is clicked show explanation of the program
                 //-->Show about dialog
-                //This a new independent window
+                // Stage dialog = new Stage();
+                // dialog.initModality(Modality.WINDOW_MODAL);
+                // FXMLLoader loader = new FXMLLoader();
+                // loader.setLocation(this.getClass().getResource("/fxml/About.fxml"));
+                // try{
+                //     Scene scene = loader.load();
+                //     scene.getStylesheets().add(getClass().getResource("/styles/Styles.css").toExternalForm());//Add css
+                //     dialog.setScene(scene);
+                // }catch(IOException ex){ex.printStackTrace();}
+                // dialog.initOwner(((Node)e.getTarget()).getScene().getWindow());
+                // dialog.show();
+                DialogPane dialog = new DialogPane();
+                dialog.getStylesheets().add(getClass().getResource("/styles/Styles.css").toExternalForm());//Add css
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(this.getClass().getResource("/fxml/About.fxml"));
+                try {
+                    dialog = loader.load();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+                Alert alert = new Alert(AlertType.INFORMATION );
+                alert.setDialogPane(dialog);
+                // alert.setOnCloseRequest(e3->{((Event)e3.getSource()).consume();});
+                alert.show();
+                e.consume();
                 //<--Show about dialog
                 System.out.println("about button clicked");
-            }
         });
 
         // lastViewed.setItems(model.getLastViewedProperty());
@@ -83,27 +115,6 @@ public class FXMLController implements Initializable {
                     setText(item.getName());
             }
         });
-    }
-    @FXML
-    public void loadClicked(ActionEvent e){
-        //-->Select file
-        FileChooser fiChooser = new FileChooser();
-        fiChooser.setTitle("Select a data file(csv/xlsx)");
-        File file = fiChooser.showOpenDialog( null );
-        if( !(file.getName().endsWith(".xlsx") || file.getName().endsWith(".csv")) ){
-            Alert error = new Alert(AlertType.ERROR);
-            error.setTitle("Wrong file type");
-            error.setHeaderText("The file " + file.getName() + " is not valid");
-            error.show();
-            e.consume();
-        }
-        //<--Select file
-
-        //-->Load file
-        else{
-            this.model.setFile(file);
-            System.out.println("Load file " + file.getName());
-        }
-        //<--Load file
+        //<--Event Handling
     }
 }

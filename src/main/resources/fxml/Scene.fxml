@@ -36,7 +36,7 @@
          <children>
             <HBox prefWidth="200.0">
                <children>
-                  <Button fx:id="loadFile" onAction="#loadClicked" text="Load File">
+                  <Button fx:id="loadFile" text="Load File">
                      <HBox.margin>
                         <Insets left="5.0" right="6.0" />
                      </HBox.margin>
