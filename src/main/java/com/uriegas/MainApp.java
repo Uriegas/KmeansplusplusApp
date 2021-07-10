@@ -1,6 +1,5 @@
 package com.uriegas;
 
-import java.util.*;
 import javafx.application.Application;
 import javafx.fxml.*;
 import javafx.scene.*;

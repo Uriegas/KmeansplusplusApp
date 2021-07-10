@@ -1,21 +1,24 @@
 package com.uriegas;
 
+import java.io.*;
 import java.net.URL;
 import java.util.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.collections.*;
+import javafx.event.*;
+import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
+import javafx.stage.*;
 /**
  * Controller of the Scene view
  */
 public class FXMLController implements Initializable {
-    @FXML private TableView<ArrayList<List<String>>> table;
-    @FXML private ListView<String> lastViewed;
+    public Model model;
+    @FXML private TableView<ObservableList<String>> table;
+    @FXML private ListView<File> lastViewed;
     @FXML private Button loadFile;
     @FXML private Button applyKmeans;
+    @FXML private Button about;
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
@@ -24,27 +27,67 @@ public class FXMLController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        loadFile.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        this.model = new Model();
+        //-->Data binding
+        lastViewed.setItems(this.model.filesProperty());
+        table.setItems(this.model.tableProperty());
+        //<--Data binding
+        // loadFile.setOnMouseClicked(new EventHandler<MouseEvent>(){//When loadFile is clicked
+        //     final Table table = new Table();
+        //     @Override public void handle(MouseEvent e){
+        //         //-->Select file
+        //         FileChooser fiChooser = new FileChooser();
+        //         fiChooser.setTitle("Select a data file(csv/xlsx)");
+        //         File file = fiChooser.showOpenDialog( null );
+        //         //<--Select file
+
+        //         //-->Load file
+        //         this.model.setFile(file);
+        //         System.out.println("Load file " + file.getName());
+        //         //<--Load file
+        //     }
+        // });
+        applyKmeans.setOnMouseClicked(new EventHandler<MouseEvent>(){//When kmeans is clicked
             @Override public void handle(MouseEvent e){
-                System.out.println("Load file clicked");
+                //-->Show: select k dialog
+                //<--Show: select k dialog
+                //-->Show kmeas++ aggrupation
+                //<--Show kmeas++ aggrupation
+                System.out.println("apply kmeans clicked");
             }
         });
-        loadFile.setOnMouseClicked(new EventHandler<MouseEvent>(){
-            @Override public void handle(MouseEvent e){
-                System.out.println("apply kmeans clicked");
+        about.setOnMouseClicked(new EventHandler<MouseEvent>(){//When about is clicked
+            @Override public void handle(MouseEvent e){//Show explanation of the program
+                //-->Show about dialog
+                //This a new independent window
+                //<--Show about dialog
+                System.out.println("about button clicked");
             }
         });
 
         // lastViewed.setItems(model.getLastViewedProperty());
-        lastViewed.setCellFactory(lv -> new ListCell<String>(){
-            @Override public void updateItem(String item, boolean empty){
+        lastViewed.setCellFactory(lv -> new ListCell<File>(){
+            @Override public void updateItem(File item, boolean empty){
                 super.updateItem(item, empty);
                 if(empty)
                     setText(null);
                 else
-                    setText(item);
+                    setText(item.getName());
             }
         });
-    }    
+    }
+    @FXML
+    public void loadClicked(ActionEvent e){
+        //-->Select file
+        FileChooser fiChooser = new FileChooser();
+        fiChooser.setTitle("Select a data file(csv/xlsx)");
+        File file = fiChooser.showOpenDialog( null );
+        //TODO: verify extension
+        //<--Select file
+
+        //-->Load file
+        this.model.setFile(file);
+        System.out.println("Load file " + file.getName());
+        //<--Load file
+    }
 }

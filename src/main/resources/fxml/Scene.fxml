@@ -35,7 +35,7 @@
          <children>
             <HBox prefWidth="200.0">
                <children>
-                  <Button fx:id="loadFile" text="Load File">
+                  <Button fx:id="loadFile" onAction="#loadClicked" text="Load File">
                      <HBox.margin>
                         <Insets left="5.0" right="6.0" />
                      </HBox.margin>
@@ -71,7 +71,7 @@
                </HBox.margin>
             </Text>
             <Separator prefWidth="1000.0" />
-            <Button mnemonicParsing="false" text="+">
+            <Button fx:id="about" mnemonicParsing="false" text="+">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
                </HBox.margin></Button>
