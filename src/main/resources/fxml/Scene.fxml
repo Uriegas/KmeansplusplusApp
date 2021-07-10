@@ -47,7 +47,7 @@
                   </Button>
                </children>
             </HBox>
-            <ListView fx:id="lastViewed" prefWidth="77.0">
+            <ListView fx:id="lastViewed" VBox.vgrow="ALWAYS">
                <padding>
                   <Insets left="5.0" right="5.0" top="5.0" />
                </padding>
