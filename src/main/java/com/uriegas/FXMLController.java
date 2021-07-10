@@ -20,6 +20,7 @@ public class FXMLController implements Initializable {
     @FXML private Button loadFile;
     @FXML private Button applyKmeans;
     @FXML private Button about;
+    @FXML private TextField currentFile;
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
@@ -32,7 +33,13 @@ public class FXMLController implements Initializable {
         //-->Data binding
         lastViewed.setItems(this.model.filesProperty());
         table.setItems(this.model.tableProperty());
+        currentFile.textProperty().bindBidirectional(this.model.currentFileProperty());
         //<--Data binding
+        lastViewed.setOnMouseClicked(event -> {
+            if( event.getButton().equals(MouseButton.PRIMARY) )
+                if( event.getClickCount() == 2 )
+                    this.model.setFile(lastViewed.getSelectionModel().getSelectedItem());
+        });
         // loadFile.setOnMouseClicked(new EventHandler<MouseEvent>(){//When loadFile is clicked
         //     final Table table = new Table();
         //     @Override public void handle(MouseEvent e){
