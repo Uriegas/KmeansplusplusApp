@@ -9,20 +9,24 @@ import javafx.stage.Stage;
  * Main Apllication of the project
  */
 public class MainApp extends Application {
-
     /**
      * Start method
      */
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
-        
+        Parent root = FXMLLoader.load(this.getClass().getResource("/fxml/Scene.fxml"));
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/Styles.css");
-        
         stage.setTitle("Kmeans++ distribuido");
         stage.setScene(scene);
         stage.show();
+    }
+    /**
+     * Stop method: when application is closed save data
+     */
+    @Override
+    public void stop(){
+        
     }
 
     /**

@@ -2,6 +2,7 @@ package com.uriegas;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.*;
 import javafx.collections.*;
 import javafx.event.*;
@@ -15,8 +16,8 @@ import javafx.stage.*;
 /**
  * Controller of the Scene view
  */
-public class FXMLController implements Initializable {
-    public Model model;
+public class FXMLController {
+    private Model model;
     @FXML private TableView<ObservableList<String>> table;
     @FXML private ListView<File> lastViewed;
     @FXML private Button loadFile;
@@ -24,19 +25,36 @@ public class FXMLController implements Initializable {
     @FXML private Button about;
     @FXML private TextField currentFile;
 
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-    }
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        this.model = new Model();
+    /**
+     * Initialize the model
+     * @param m
+     */
+    public void initModel(Model m){
+        this.model = m;
         //-->Data binding
         lastViewed.setItems(this.model.filesProperty());
         table.setItems(this.model.tableProperty());
         currentFile.textProperty().bindBidirectional(this.model.currentFileProperty());
         //<--Data binding
+    }
+    
+    public void initialize() {
+        //-->Load Model
+        Model m = new Model();
+        try{
+            Files.createDirectory(new File(System.getProperty("user.home") + "/.KmeansApp").toPath());
+        }catch(Exception ex){System.out.println("Hidden directory exists");}
+        //<--Create hidden folder
+        //-->Load data model from file
+        File f = new File(System.getProperty("user.home") + "/.KmeansApp/Model.ser");
+        try(ObjectInputStream out = new ObjectInputStream(new FileInputStream(f))){
+            m = (Model)out.readObject();
+            System.out.printf("Deserialized data from /MailModel.ser");
+        } catch (Exception i) {
+            i.printStackTrace();
+        }
+        initModel(m);
+        //<--Load Model
 
         //-->Event Handling
         lastViewed.setOnMouseClicked(event -> {

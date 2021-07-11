@@ -5,12 +5,23 @@ import java.util.*;
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.scene.control.*;
-
+/**
+ * Data Model for this project: contains stored files, loaded data and current file.
+ */
 public class Model implements Serializable {
+	/**
+	 * List of files to show the user recently used files
+	 */
 	private transient ObservableList<File> files = FXCollections.observableArrayList();
+	/**
+	 * The current loaded data (table)
+	 */
 	private transient Table table = new Table();
+	/**
+	 * The current loaded data path (file)
+	 */
 	private transient StringProperty currentFile = new SimpleStringProperty(){
-		@Override public String get(){
+		@Override public String get(){//Overload get method to show name of file instead of absolute path
 			try{
 				if(super.get().contains("/"))
 					return super.get().substring(super.get().lastIndexOf("/")+1, super.get().length());
@@ -85,4 +96,28 @@ public class Model implements Serializable {
 		return currentFileProperty().get();
 	}
 	//<--CurrentFile methods
+
+	/**
+	 * Serialize this object
+	 * @param s
+	 * @throws Exception
+	 */
+    private void writeObject(ObjectOutputStream s) throws Exception {
+        // s.defaultWriteObject();
+		s.writeObject(getFiles());
+		s.writeUTF(getCurrentFile());
+    }
+	/**
+	 * Serialize this object, expect for the mails
+	 * @param s
+	 * @throws Exception
+	 */
+    private void readObject(ObjectInputStream s) throws Exception {
+        s.defaultReadObject();
+		files = FXCollections.observableList((List<File>)s.readObject());
+		currentFile = new SimpleStringProperty(s.readUTF());
+		//-->Initialize not serialized objects(if not initialized they are null)
+		table = new Table();
+		//<--Initialize not serialized objects(if not initialized they are null)
+    }
 }
