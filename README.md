@@ -1,6 +1,13 @@
 # POO-Unidad-3-Actividad-1
 Actividad 5: KMeans distribuido
 
+### TODO
+1. Implementar data binding para la tabla a analizar
+2. Cargar el data model al controller no funciona del todo o más su implementación es problemática
+3. Con el cargado de archivos excel y csv a un tipo de dato
+4. Implementar los algoritmo de kmeans con sus respectivas pruebas unitarias
+5. Dar al usuario la opción de poner la tabla con encabezados o sin encabezados, debido a que hay tablas (xlsx, csv) que no cuentan con *headers* por lo que la primera fila debe ser considera como datos
+
 ### Objetivo de la Práctica
 
 El alumno deberá demostrar solura en los siguientes temas de la Programación Orientada a Objetos.

@@ -24,16 +24,17 @@ public class ReadTableTest {
      */
     @Parameterized.Parameters(name = "Source file is {0}")
     public static Collection<String> getTestData(){
-		return Arrays.asList( "/examples/data1.csv", "/examples/data2/csv",
-		"/examples/data3.xlsx", "/examples/data4.xlsx", "/examples/data5.xlsx");
+		return Arrays.asList( "/datasets/mcdonalds.csv", "/datasets/walmart.csv");
+		// "/datasets/data3.xlsx", "/datasets/data4.xlsx", "/datasets/data5.xlsx");
 	}
 	/**
 	 * Test if the specified csv/xlsx path is successfully loaded
 	 * Assert that the code doesn't throws an error
 	 */
 	@Test
-	public void loadDataTest(){
-		// Excel.load(path);
-		System.out.println(path);
+	public void loadDataTest() throws Exception{
+		// Excel.load(path); 
+		Utilities.loadFile(new File( new File(".").getCanonicalPath() + "/src/main/resources" + path));
+		// System.out.println(t.toString());
 	}
 }

@@ -41,11 +41,11 @@ public class CentroidsTest {
     public static Collection<Object[]> getTestData(){
 		return Arrays.asList(
             new Object[][]{//path and k
-                {"/examples/data1.csv", 9},
-                {"/examples/data2.csv", 8},
-                {"/examples/data3.csv", 2},
-                {"/examples/data4.csv", 7},
-                {"/examples/data5.csv", 2},
+                {"/datasets/mcdonalds.csv", 9},
+                {"/datasets/walmart.csv", 8},
+                {"/datasets/data3.csv", 2},
+                {"/datasets/data4.csv", 7},
+                {"/datasets/data5.csv", 2},
             }
         );
 	}
