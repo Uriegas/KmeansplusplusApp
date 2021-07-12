@@ -50,11 +50,87 @@ public class KmeansTest {
         );
 	}
     /**
-     * Test that kmeans algorithm works
+     * Test classical centroids
      */
     @Test
     public void testCentroids(){
-		// kmeans.k_means_plus_plus(data, k)
-        System.out.println(path + " with k = " + k);
+        System.out.println("Centroids test");
+        long time = System.currentTimeMillis();
+
+        //-->Run and mesuare code performance
+		kmeans.get_random_centroids(data, k);
+        //<--Run and mesuare code performance
+
+        System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
+    }
+    /**
+     * Test centroids with kmeans++
+     */
+    @Test
+    public void testCentroids_plus_plus(){
+        System.out.println("Centroids++ test");
+        long time = System.currentTimeMillis();
+
+        //-->Run and mesuare code performance
+		kmeans.get_centroids(data, k);
+        //<--Run and mesuare code performance
+
+        System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
+    }
+    /**
+     * Test classical kmeans algorithm
+     */
+    @Test
+    public void testKmeans(){
+        System.out.println("Kmeans test");
+        long time = System.currentTimeMillis();
+
+        //-->Run and mesuare code performance
+		kmeans.classic_kmeans(data, k);
+        //<--Run and mesuare code performance
+
+        System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
+    }
+    /**
+     * Test classical kmeans distributed algorithm
+     */
+    @Test
+    public void testKmeans_distributed(){
+        System.out.println("Kmeans test");
+        long time = System.currentTimeMillis();
+
+        //-->Run and mesuare code performance
+		kmeans.classic_kmeans(data, k);
+        //<--Run and mesuare code performance
+
+        System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
+    }
+    /**
+     * Test kmeans++ algorithm
+     */
+    @Test
+    public void testKmeans_plus_plus(){
+        System.out.println("Kmeans++ test");
+        long time = System.currentTimeMillis();
+
+        //-->Run and mesuare code performance
+		kmeans.k_means_plus_plus(data, k);
+        //<--Run and mesuare code performance
+
+        System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
+    }
+    /**
+     * Test kmeans++ distributed algorithm
+     */
+    @Test
+    public void testKmeans_plus_plus_distributed(){
+        System.out.println("Kmeans++ test");
+        long time = System.currentTimeMillis();
+
+        //-->Run and mesuare code performance
+		kmeans.k_means_plus_plus_distributed(data, k);
+        //<--Run and mesuare code performance
+
+        System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
     }
 }
