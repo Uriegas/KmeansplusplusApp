@@ -19,10 +19,6 @@
    </bottom>
    <center>
       <TableView fx:id="table" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
-        </columns>
          <BorderPane.margin>
             <Insets bottom="5.0" />
          </BorderPane.margin>
@@ -36,14 +32,9 @@
          <children>
             <HBox prefWidth="200.0">
                <children>
-                  <Button fx:id="loadFile" text="Load File">
+                  <Button fx:id="dragAndDrop" prefHeight="47.0" prefWidth="162.0" text="Drag &amp; Drop">
                      <HBox.margin>
                         <Insets left="5.0" right="6.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button fx:id="applyKmeans" mnemonicParsing="false" text="Process">
-                     <HBox.margin>
-                        <Insets left="6.0" right="6.0" />
                      </HBox.margin>
                   </Button>
                </children>
@@ -63,39 +54,40 @@
       </VBox>
    </left>
    <top>
-      <VBox prefHeight="65.0" prefWidth="686.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="38.0" prefWidth="686.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="22.0" prefWidth="686.0">
-               <children>
-                  <Separator prefWidth="1000.0" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="KMeans++ Distribuido">
-                     <HBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </HBox.margin>
-                  </Text>
-                  <Separator prefWidth="1000.0" />
-                  <Button fx:id="about" mnemonicParsing="false" text="+">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-            </HBox>
             <HBox prefHeight="29.0" prefWidth="686.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current File:" wrappingWidth="86.7294921875">
                      <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="3.0" />
+                        <Insets left="5.0" top="3.0" />
                      </HBox.margin>
                   </Text>
                   <TextField fx:id="currentFile" editable="false" prefHeight="24.0" prefWidth="287.0" promptText="current file">
                      <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" />
+                        <Insets right="5.0" />
                      </HBox.margin>
                   </TextField>
+                  <Separator orientation="VERTICAL" prefHeight="2000.0">
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin>
+                  </Separator>
+                  <Button fx:id="loadFile" mnemonicParsing="false" text="Load file" />
+                  <Button fx:id="applyKmeans" mnemonicParsing="false" text="&gt;">
+                     <HBox.margin>
+                        <Insets left="6.0" right="6.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Separator opacity="0.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="about" mnemonicParsing="false" text="+">
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
                <VBox.margin>
-                  <Insets left="5.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
          </children>

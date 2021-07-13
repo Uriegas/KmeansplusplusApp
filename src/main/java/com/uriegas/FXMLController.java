@@ -4,12 +4,12 @@ import java.io.*;
 import java.util.*;
 
 import javafx.collections.*;
+import javafx.concurrent.Task;
 import javafx.fxml.*;
 import javafx.geometry.*;
 import javafx.scene.*;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
@@ -24,6 +24,7 @@ public class FXMLController extends Window {
     @FXML private Button applyKmeans;
     @FXML private Button about;
     @FXML private TextField currentFile;
+    @FXML private Button dragAndDrop;
 
     /**
      * Initialize the model<p>
@@ -46,28 +47,23 @@ public class FXMLController extends Window {
         //-->Event Handling
         lastViewed.setOnMouseClicked(e -> {
             if( e.getButton().equals(MouseButton.PRIMARY) )
-                if( e.getClickCount() == 2 )
-                    this.model.setFile(lastViewed.getSelectionModel().getSelectedItem());
+                if( e.getClickCount() == 2 ){
+                    //-->Load file
+                    Task<String> task = model.fileLoaderTask(lastViewed.getSelectionModel().getSelectedItem());
+                    task.run();
+                    //<--Load file
+                }
         });
         loadFile.setOnMouseClicked(e ->{ //When loadFile is clicked
             //-->Select file
             FileChooser fiChooser = new FileChooser();
             fiChooser.setTitle("Select a data file(csv/xlsx)");
             File file = fiChooser.showOpenDialog( null );
-            if( !(file.getName().endsWith(".xlsx") || file.getName().endsWith(".csv")) ){
-                Alert error = new Alert(AlertType.ERROR);
-                error.setTitle("Wrong file type");
-                error.setHeaderText("The file " + file.getName() + " has not a valid format");
-                error.show();
-                e.consume();
-            }
             //<--Select file
 
             //-->Load file
-            else{
-                this.model.setFile(file);
-                System.out.println("Load file " + file.getName());
-            }
+            Task<String> task = model.fileLoaderTask(file);
+            task.run();
             //<--Load file
         });
         applyKmeans.setOnMouseClicked(e ->{//When kmeans is clicked
@@ -105,6 +101,20 @@ public class FXMLController extends Window {
                 System.out.println("about button clicked");
                 // //<--Show about dialog
         });
+        dragAndDrop.setOnDragOver(event ->{//When about is dragged show explanation of the program
+            event.acceptTransferModes(TransferMode.MOVE);
+        });
+        dragAndDrop.setOnDragDropped(e ->{
+            Dragboard db = e.getDragboard();
+
+            if( db.hasFiles() ){
+                File file = db.getFiles().get(0);//Get only the first file
+                System.out.println("File dropped: " + file.getName());
+                Task<String> loadFile = model.fileLoaderTask(file);//Load the file
+                loadFile.run();
+            }
+
+        });
         //<--Event Handling
 
         //-->Formatting data
@@ -129,10 +139,10 @@ public class FXMLController extends Window {
         yAxis.setLabel("y");
         scatter.setTitle("Scatter(x,y)");
 
-        XYChart.Series series1 = new XYChart.Series();
+        XYChart.Series<Number,Number> series1 = new XYChart.Series<Number,Number>();
         series1.setName("Data");
         for(int i = 0; i < x.size(); i++ )
-            series1.getData().add(new XYChart.Data(x.get(i), y.get(i)));
+            series1.getData().add(new XYChart.Data<Number, Number>(x.get(i), y.get(i)));
       
         scatter.getData().addAll(series1);
 

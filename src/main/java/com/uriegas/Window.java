@@ -3,7 +3,6 @@ package com.uriegas;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
-import javafx.scene.control.DialogPane;
 import javafx.stage.*;
 import java.io.*;
 /**
@@ -28,16 +27,6 @@ public class Window {
             w.initModel(m);
             switchscene.setScene(scene);
         }catch(IOException ex){ex.printStackTrace();}
-        //Another approach
-        // try {
-        //     Parent root = FXMLLoader.load(getClass().getResource(FXML));
-        //     Stage stage = new Stage();
-        //     stage.setScene(new Scene(root));
-        //     stage.initModality(Modality.APPLICATION_MODAL);
-        //     stage.show();
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
     }
     /**
      * Abstract method for initializing the model

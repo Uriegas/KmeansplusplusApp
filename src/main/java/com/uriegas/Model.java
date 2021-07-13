@@ -2,6 +2,7 @@ package com.uriegas;
 
 import java.io.*;
 import java.util.*;
+import javafx.concurrent.*;
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.scene.control.*;
@@ -39,25 +40,27 @@ public class Model implements Serializable {
 	}
 	public void setTable(ArrayList<List<String>> table){
         ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();//Excel table in javafx arraylist's
-        List<String> headers = table.get(0);//Headers of the table
+        // List<String> headers = table.get(0);//Headers of the table
 
-        for(int i = 1; i < table.size(); i++)
+		//-->Load data into the table
+        for(int i = 0; i < table.size(); i++)
             data.add(FXCollections.observableArrayList(table.get(i)));
 
         this.table.setItems(data);
+		//<--Load data into the table
 
         //Create the table columns, set the cell value factory and add the column to the tableview.
         for (int i = 0; i < table.get(0).size(); i++) {
             final int curCol = i;
             final TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-                    headers.get(curCol)
+                    "Column " + (i + 1)
             );
             column.setCellValueFactory(
                     param -> new ReadOnlyObjectWrapper<>(param.getValue().get(curCol))
             );
             this.table.getColumns().add(column);
         }
-		this.table.setHeaders((ArrayList<String>)headers);
+		// this.table.setHeaders((ArrayList<String>)headers);
 	}
 	//<--Table methods
 
@@ -112,6 +115,7 @@ public class Model implements Serializable {
 	 * @param s
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream s) throws Exception {
         s.defaultReadObject();
 		files = FXCollections.observableList((List<File>)s.readObject());
@@ -120,4 +124,44 @@ public class Model implements Serializable {
 		table = new Table();
 		//<--Initialize not serialized objects(if not initialized they are null)
     }
+	public Task<String> fileLoaderTask(File fileToLoad){
+		//Create a task to load the file asynchronously
+		Task<String> loadFileTask = new Task<>() {
+			@Override
+			protected String call() throws Exception {//Load the file
+				ArrayList<List<String>> data = new ArrayList<>();
+				if( fileToLoad.getName().endsWith(".xlsx") || fileToLoad.getName().endsWith(".csv") ){
+					data = Utilities.loadFile(fileToLoad);
+					setTable(data);
+					setFile(fileToLoad);
+				}else{throw new Exception("File format not supported");}
+				System.out.println("Loaded file: " + fileToLoad.getAbsolutePath());
+				return "File loaded";
+			}
+		};
+
+		//If successful, update the text area, display a success message and store the loaded file reference
+		loadFileTask.setOnSucceeded(workerStateEvent -> {
+			try {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				alert.setTitle("File loaded");
+				alert.setHeaderText("File loaded");
+				alert.setContentText("File loaded successfully");
+				alert.show();
+			} catch (Exception e) {
+				System.out.println("Error loading file: " + fileToLoad.getAbsolutePath());
+			}
+		});
+
+		//If unsuccessful, set text area with error message and status message to failed
+		loadFileTask.setOnFailed(workerStateEvent -> {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("Error loading file");
+			alert.setContentText("Could not load file from:\n " + fileToLoad.getAbsolutePath());
+			alert.show();
+		});
+
+		return loadFileTask;
+	}
 }
