@@ -8,6 +8,7 @@ Actividad 5: KMeans distribuido
 4. Implementar los algoritmo de kmeans con sus respectivas pruebas unitarias
 5. Dar al usuario la opción de poner la tabla con encabezados o sin encabezados, debido a que hay tablas (xlsx, csv) que no cuentan con *headers* por lo que la primera fila debe ser considera como datos
 6. *Agregar al final* Drag & Drop
+7. Añadir un botón para seleccionar las 2 columnas a graficar su correlación(Nota: a la gráfica hay que añadirle la línea de regresión y el coeficiente de Pearson)
 
 ### Objetivo de la Práctica
 

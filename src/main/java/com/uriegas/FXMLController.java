@@ -1,19 +1,23 @@
 package com.uriegas;
 
 import java.io.*;
-import java.util.Optional;
+import java.util.*;
 
 import javafx.collections.*;
 import javafx.fxml.*;
+import javafx.geometry.*;
+import javafx.scene.*;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert.*;
 import javafx.scene.input.*;
+import javafx.scene.layout.*;
+import javafx.scene.text.*;
 import javafx.stage.*;
 /**
  * Controller of the Scene view
  */
 public class FXMLController extends Window {
-    // private Model model;
     @FXML private TableView<ObservableList<String>> table;
     @FXML private ListView<File> lastViewed;
     @FXML private Button loadFile;
@@ -40,9 +44,9 @@ public class FXMLController extends Window {
      */
     public void initialize() {
         //-->Event Handling
-        lastViewed.setOnMouseClicked(event -> {
-            if( event.getButton().equals(MouseButton.PRIMARY) )
-                if( event.getClickCount() == 2 )
+        lastViewed.setOnMouseClicked(e -> {
+            if( e.getButton().equals(MouseButton.PRIMARY) )
+                if( e.getClickCount() == 2 )
                     this.model.setFile(lastViewed.getSelectionModel().getSelectedItem());
         });
         loadFile.setOnMouseClicked(e ->{ //When loadFile is clicked
@@ -88,6 +92,10 @@ public class FXMLController extends Window {
                 //<--Show: select k dialog
 
                 //-->Show kmeas++ aggrupation
+                //TODO: call utility function to analize data
+                List<Double> x = Arrays.asList(Double.valueOf(14.2), Double.valueOf(48.2), Double.valueOf(14.7));
+                List<Double> y = Arrays.asList(Double.valueOf(14.2), Double.valueOf(48.2), Double.valueOf(14.7));
+                plotScatter(x, y);
                 //<--Show kmeas++ aggrupation
                 System.out.println("apply kmeans clicked, k is " + ( input.isPresent() ? input.get() : "nothig") );
         });
@@ -110,5 +118,31 @@ public class FXMLController extends Window {
             }
         });
         //<--Formatting data
+    }
+
+    static void plotScatter(List<Double> x, List<Double> y){
+        Text txt = new Text("Scatter(x,y)");
+        NumberAxis xAxis = new NumberAxis(0, 10, 1);
+        NumberAxis yAxis = new NumberAxis(-100, 500, 100);
+        ScatterChart<Number, Number> scatter = new ScatterChart<Number, Number>(xAxis, yAxis);
+        xAxis.setLabel("x");
+        yAxis.setLabel("y");
+        scatter.setTitle("Scatter(x,y)");
+
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName("Data");
+        for(int i = 0; i < x.size(); i++ )
+            series1.getData().add(new XYChart.Data(x.get(i), y.get(i)));
+      
+        scatter.getData().addAll(series1);
+
+        VBox vb = new VBox(txt, scatter);
+        vb.setAlignment(Pos.CENTER);
+        vb.setPadding(new Insets(10, 10, 10, 10));
+
+        Stage s = new Stage();
+        s.setTitle("Scatter graph");
+        s.setScene(new Scene(vb, 400, 400));
+        s.show();
     }
 }
