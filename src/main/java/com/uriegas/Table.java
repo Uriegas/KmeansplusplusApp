@@ -32,13 +32,13 @@ public class Table extends TableView<ObservableList<String>> {
 	public ArrayList<List<String>> getData(){
 		return table;
 	}
-	@Override public String toString(){
-		String s = "";
-		for( List<String> row : table ){
-			for( String cell : row )
-				s += cell + ", ";
-			s += '\n';
-		}
-		return s;
-	}
+	// @Override public String toString(){
+	// 	String s = "";
+	// 	for( List<String> row : table ){
+	// 		for( String cell : row )
+	// 			s += cell + ", ";
+	// 		s += '\n';
+	// 	}
+	// 	return s;
+	// }
 }

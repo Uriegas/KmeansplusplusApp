@@ -9,6 +9,7 @@ Actividad 5: KMeans distribuido
 5. Dar al usuario la opción de poner la tabla con encabezados o sin encabezados, debido a que hay tablas (xlsx, csv) que no cuentan con *headers* por lo que la primera fila debe ser considera como datos
 6. *Agregar al final* Drag & Drop
 7. Añadir un botón para seleccionar las 2 columnas a graficar su correlación(Nota: a la gráfica hay que añadirle la línea de regresión y el coeficiente de Pearson)
+8. Necesito rediseñar el modelo de tabla, en vez de guardar un objeto TableView creo que puedo hacer un observablelist de olbservablelist's que sea el usado en para la tabla, pero no estoy muy seguro, en mi mente funciona pero tengo que ver bien como se hace el data binding del tableview
 
 ### Objetivo de la Práctica
 

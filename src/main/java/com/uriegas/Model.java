@@ -17,7 +17,7 @@ public class Model implements Serializable {
 	/**
 	 * The current loaded data (table)
 	 */
-	private transient Table table = new Table();
+	private transient Table theTable = new Table();
 	/**
 	 * The current loaded data path (file)
 	 */
@@ -36,17 +36,17 @@ public class Model implements Serializable {
 
 	//-->Table methods
 	public ObservableList<ObservableList<String>> tableProperty(){
-		return table.getItems();
+		return theTable.getItems();
 	}
 	public void setTable(ArrayList<List<String>> table){
         ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();//Excel table in javafx arraylist's
-        // List<String> headers = table.get(0);//Headers of the table
+        List<String> headers = new ArrayList<String>();//Headers of the table
 
 		//-->Load data into the table
         for(int i = 0; i < table.size(); i++)
             data.add(FXCollections.observableArrayList(table.get(i)));
 
-        this.table.setItems(data);
+        theTable.setItems(data);
 		//<--Load data into the table
 
         //Create the table columns, set the cell value factory and add the column to the tableview.
@@ -58,9 +58,9 @@ public class Model implements Serializable {
             column.setCellValueFactory(
                     param -> new ReadOnlyObjectWrapper<>(param.getValue().get(curCol))
             );
-            this.table.getColumns().add(column);
+            theTable.getColumns().add(column);
         }
-		// this.table.setHeaders((ArrayList<String>)headers);
+		theTable.setHeaders((ArrayList<String>)headers);
 	}
 	//<--Table methods
 
@@ -121,7 +121,7 @@ public class Model implements Serializable {
 		files = FXCollections.observableList((List<File>)s.readObject());
 		currentFile = new SimpleStringProperty(s.readUTF());
 		//-->Initialize not serialized objects(if not initialized they are null)
-		table = new Table();
+		theTable = new Table();
 		//<--Initialize not serialized objects(if not initialized they are null)
     }
 	public Task<String> fileLoaderTask(File fileToLoad){
