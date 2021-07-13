@@ -1,6 +1,8 @@
 package com.uriegas;
 
 import java.io.*;
+import java.util.Optional;
+
 import javafx.collections.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
@@ -20,7 +22,8 @@ public class FXMLController extends Window {
     @FXML private TextField currentFile;
 
     /**
-     * Initialize the model
+     * Initialize the model<p>
+     * Here we implement data binding
      * @param m
      */
     public void initModel(Model m){
@@ -31,7 +34,10 @@ public class FXMLController extends Window {
         currentFile.textProperty().bindBidirectional(this.model.currentFileProperty());
         //<--Data binding
     }
-    
+    /**
+     * Initialize the controller<p>
+     * Here we implement event handling
+     */
     public void initialize() {
         //-->Event Handling
         lastViewed.setOnMouseClicked(event -> {
@@ -62,10 +68,28 @@ public class FXMLController extends Window {
         });
         applyKmeans.setOnMouseClicked(e ->{//When kmeans is clicked
                 //-->Show: select k dialog
+                TextInputDialog popup = new TextInputDialog("2");
+                popup.setTitle("Select K value");
+                popup.setHeaderText("Enter number of k-classes");
+                popup.getDialogPane().setContentText("K: ");
+                popup.getEditor().setTextFormatter(new TextFormatter<>(c ->{//Allow only positive integers
+                    if (c.isContentChange()) {
+                        if (c.getControlNewText().length() == 0)
+                            return c;
+                        try {
+                            Integer.parseInt(c.getControlNewText());
+                            return c;
+                        } catch (NumberFormatException ex){}
+                        return null;
+                    }
+                    return c;
+                }));
+                Optional<String> input = popup.showAndWait();
                 //<--Show: select k dialog
+
                 //-->Show kmeas++ aggrupation
                 //<--Show kmeas++ aggrupation
-                System.out.println("apply kmeans clicked");
+                System.out.println("apply kmeans clicked, k is " + ( input.isPresent() ? input.get() : "nothig") );
         });
         //TODO The about pop up doesn't close
         about.setOnMouseClicked(e ->{//When about is clicked show explanation of the program
@@ -99,8 +123,9 @@ public class FXMLController extends Window {
                 //<--Show about dialog
                 System.out.println("about button clicked");
         });
+        //<--Event Handling
 
-        // lastViewed.setItems(model.getLastViewedProperty());
+        //-->Formatting data
         lastViewed.setCellFactory(lv -> new ListCell<File>(){
             @Override public void updateItem(File item, boolean empty){
                 super.updateItem(item, empty);
@@ -110,6 +135,6 @@ public class FXMLController extends Window {
                     setText(item.getName());
             }
         });
-        //<--Event Handling
+        //<--Formatting data
     }
 }
