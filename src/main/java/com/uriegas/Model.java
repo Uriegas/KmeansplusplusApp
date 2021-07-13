@@ -103,7 +103,7 @@ public class Model implements Serializable {
 	 * @throws Exception
 	 */
     private void writeObject(ObjectOutputStream s) throws Exception {
-        // s.defaultWriteObject();
+        s.defaultWriteObject();
 		s.writeObject(getFiles());
 		s.writeUTF(getCurrentFile());
     }

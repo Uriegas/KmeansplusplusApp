@@ -1,14 +1,8 @@
 package com.uriegas;
 
 import java.io.*;
-import java.net.URL;
-import java.nio.file.Files;
-import java.util.*;
 import javafx.collections.*;
-import javafx.event.*;
 import javafx.fxml.*;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.*;
@@ -16,8 +10,8 @@ import javafx.stage.*;
 /**
  * Controller of the Scene view
  */
-public class FXMLController {
-    private Model model;
+public class FXMLController extends Window {
+    // private Model model;
     @FXML private TableView<ObservableList<String>> table;
     @FXML private ListView<File> lastViewed;
     @FXML private Button loadFile;
@@ -30,7 +24,7 @@ public class FXMLController {
      * @param m
      */
     public void initModel(Model m){
-        this.model = m;
+        super.initModel(m);
         //-->Data binding
         lastViewed.setItems(this.model.filesProperty());
         table.setItems(this.model.tableProperty());
@@ -39,23 +33,6 @@ public class FXMLController {
     }
     
     public void initialize() {
-        //-->Load Model
-        Model m = new Model();
-        try{
-            Files.createDirectory(new File(System.getProperty("user.home") + "/.KmeansApp").toPath());
-        }catch(Exception ex){System.out.println("Hidden directory exists");}
-        //<--Create hidden folder
-        //-->Load data model from file
-        File f = new File(System.getProperty("user.home") + "/.KmeansApp/Model.ser");
-        try(ObjectInputStream out = new ObjectInputStream(new FileInputStream(f))){
-            m = (Model)out.readObject();
-            System.out.printf("Deserialized data from /MailModel.ser");
-        } catch (Exception i) {
-            i.printStackTrace();
-        }
-        initModel(m);
-        //<--Load Model
-
         //-->Event Handling
         lastViewed.setOnMouseClicked(event -> {
             if( event.getButton().equals(MouseButton.PRIMARY) )
