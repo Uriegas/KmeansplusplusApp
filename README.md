@@ -7,6 +7,7 @@ Actividad 5: KMeans distribuido
 3. Con el cargado de archivos excel y csv a un tipo de dato
 4. Implementar los algoritmo de kmeans con sus respectivas pruebas unitarias
 5. Dar al usuario la opción de poner la tabla con encabezados o sin encabezados, debido a que hay tablas (xlsx, csv) que no cuentan con *headers* por lo que la primera fila debe ser considera como datos
+6. *Agregar al final* Drag & Drop
 
 ### Objetivo de la Práctica
 

@@ -3,6 +3,7 @@ package com.uriegas;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
+import javafx.scene.control.DialogPane;
 import javafx.stage.*;
 import java.io.*;
 /**
@@ -58,22 +59,13 @@ public class Window {
         Stage dialog = new Stage(); // new stage
         dialog.initModality(Modality.WINDOW_MODAL);
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(this.getClass().getResource("/fxml"+FXML));
+        loader.setLocation(this.getClass().getResource("/fxml/"+FXML));
         try{
-            Scene scene = loader.load();
-            // scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());//Add css
-            Window x = loader.getController();
-            x.initModel(model);
+			Parent root = loader.load();
+            Scene scene = new Scene(root);
             dialog.setScene(scene);
         }catch(IOException ex){ex.printStackTrace();}
-        // Defines a modal window that blocks events from being
-        // delivered to any other application window.
         dialog.initOwner(((Node)e.getTarget()).getScene().getWindow());
-        // dialog.setOnCloseRequest(event ->{
-        //     Node source = (Node)event.getSource();
-        //     Stage stage = (Stage)source.getScene().getWindow();
-        //     stage.close();
-        // });
         dialog.show();
     }
 }

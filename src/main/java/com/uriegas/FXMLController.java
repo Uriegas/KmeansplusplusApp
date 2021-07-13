@@ -91,37 +91,11 @@ public class FXMLController extends Window {
                 //<--Show kmeas++ aggrupation
                 System.out.println("apply kmeans clicked, k is " + ( input.isPresent() ? input.get() : "nothig") );
         });
-        //TODO The about pop up doesn't close
         about.setOnMouseClicked(e ->{//When about is clicked show explanation of the program
                 //-->Show about dialog
-                // Stage dialog = new Stage();
-                // dialog.initModality(Modality.WINDOW_MODAL);
-                // FXMLLoader loader = new FXMLLoader();
-                // loader.setLocation(this.getClass().getResource("/fxml/About.fxml"));
-                // try{
-                //     Scene scene = loader.load();
-                //     scene.getStylesheets().add(getClass().getResource("/styles/Styles.css").toExternalForm());//Add css
-                //     dialog.setScene(scene);
-                // }catch(IOException ex){ex.printStackTrace();}
-                // dialog.initOwner(((Node)e.getTarget()).getScene().getWindow());
-                // dialog.show();
-                DialogPane dialog = new DialogPane();
-                dialog.getStylesheets().add(getClass().getResource("/styles/Styles.css").toExternalForm());//Add css
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(this.getClass().getResource("/fxml/About.fxml"));
-                try {
-                    dialog = loader.load();
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-                Alert alert = new Alert(AlertType.INFORMATION );
-                alert.setDialogPane(dialog);
-                // alert.setOnCloseRequest(e3->{((Event)e3.getSource()).consume();});
-                alert.show();
-                e.consume();
-                //<--Show about dialog
+                createPopUp(e, "About.fxml");
                 System.out.println("about button clicked");
+                // //<--Show about dialog
         });
         //<--Event Handling
 
