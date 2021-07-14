@@ -146,21 +146,6 @@ public class FXMLController extends Window {
             }
 
         });
-        // dragAndDrop.setOnMouseClicked(e -> {//Add rows to the table
-        //     if( e.getButton().equals(MouseButton.PRIMARY) )
-        //         if( e.getClickCount() == 1 ){
-                    //In-line arraylist
-                    // model.setHeader(new ArrayList<String>(){{
-                    //     add("Row 1");
-                    // }});
-                    // model.getTableData().clear();
-                    // ArrayList<String> data = new ArrayList<String>(){{
-                    //     for( int i = 0; i < model.getHeaders().size(); i++ )
-                    //         add("Row " + (i+1));
-                    // }};
-                    // model.addRowToTable( data );
-        //         }
-        // });
         //<--Event Handling
 
         //-->Formatting data
