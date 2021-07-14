@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -32,14 +31,19 @@
          <children>
             <HBox prefWidth="200.0">
                <children>
-                  <Button fx:id="dragAndDrop" prefHeight="47.0" prefWidth="162.0" text="Drag &amp; Drop">
+                  <Button fx:id="loadFile" prefHeight="83.0" prefWidth="158.0" text="Drag &amp; Drop">
                      <HBox.margin>
                         <Insets left="5.0" right="6.0" />
                      </HBox.margin>
                   </Button>
                </children>
             </HBox>
-            <ListView fx:id="lastViewed" VBox.vgrow="ALWAYS">
+            <Label text="Last opened files:">
+               <VBox.margin>
+                  <Insets left="7.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+            <ListView fx:id="lastViewed" prefHeight="203.0" prefWidth="159.0" VBox.vgrow="ALWAYS">
                <padding>
                   <Insets left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -73,12 +77,12 @@
                         <Insets left="5.0" right="5.0" />
                      </HBox.margin>
                   </Separator>
-                  <Button fx:id="loadFile" mnemonicParsing="false" text="Load file" />
                   <Button fx:id="applyKmeans" mnemonicParsing="false" text="&gt;">
                      <HBox.margin>
                         <Insets left="6.0" right="6.0" />
                      </HBox.margin>
                   </Button>
+                  <Button fx:id="plotCorrelation" mnemonicParsing="false" text="Corr" />
                   <Separator opacity="0.0" HBox.hgrow="ALWAYS" />
                   <Button fx:id="about" mnemonicParsing="false" text="+">
                      <HBox.margin>

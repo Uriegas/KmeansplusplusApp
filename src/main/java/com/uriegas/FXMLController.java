@@ -26,6 +26,7 @@ public class FXMLController extends Window {
     @FXML private Button about;
     @FXML private TextField currentFile;
     @FXML private Button dragAndDrop;
+    @FXML private Button plotCorrelation;
 
     /**
      * Initialize the model<p>
@@ -39,7 +40,7 @@ public class FXMLController extends Window {
         // table.setItems(this.model.tableProperty());
         currentFile.textProperty().bindBidirectional(this.model.currentFileProperty());
         //-->Bind the table to the headers of the model's table
-        this.model.headersProperty().addListener(new ListChangeListener<String>() {
+        this.model.headersProperty().addListener(new ListChangeListener<String>() {// TODO: maybe we can change this to a cellFactory instead of using a ListChangeListener and an embbeded CellValueFactory
             @Override
             public void onChanged(ListChangeListener.Change<? extends String> c) {
                 try{
@@ -97,6 +98,19 @@ public class FXMLController extends Window {
             task.run();
             //<--Load file
         });
+        loadFile.setOnDragOver(e ->{//When this button is accept the drag and drop
+            e.acceptTransferModes(TransferMode.MOVE);
+        });
+        loadFile.setOnDragDropped(e ->{//Execute this when accepting the drag and drop
+            Dragboard db = e.getDragboard();
+
+            if( db.hasFiles() ){
+                File file = db.getFiles().get(0);//Get only the first file
+                System.out.println("File dropped: " + file.getName());
+                Task<String> loadFile = model.fileLoaderTask(file);//Load the file
+                loadFile.run();
+            }
+        });
         applyKmeans.setOnMouseClicked(e ->{//When kmeans is clicked
                 //-->Show: select k dialog
                 TextInputDialog popup = new TextInputDialog("2");
@@ -130,26 +144,20 @@ public class FXMLController extends Window {
                 //-->Show about dialog
                 createPopUp(e, "About.fxml");
                 System.out.println("about button clicked");
-                // //<--Show about dialog
+                //<--Show about dialog
         });
-        dragAndDrop.setOnDragOver(event ->{//When about is dragged show explanation of the program
-            event.acceptTransferModes(TransferMode.MOVE);
-        });
-        dragAndDrop.setOnDragDropped(e ->{
-            Dragboard db = e.getDragboard();
-
-            if( db.hasFiles() ){
-                File file = db.getFiles().get(0);//Get only the first file
-                System.out.println("File dropped: " + file.getName());
-                Task<String> loadFile = model.fileLoaderTask(file);//Load the file
-                loadFile.run();
-            }
-
+        plotCorrelation.setOnMouseClicked(e ->{//When plot correlation is clicked show correlation plot
+            //-->Show correlation plot
+            // NumberAxis yAxis = new NumberAxis(-100, 500, 100);
+            System.out.println("plot correlation clicked");
+            createPopUp(e, "plot.fxml");
+            // NumberAxis xAxis = new NumberAxis(0, 10, 1);
+            //<--Show correlation plot
         });
         //<--Event Handling
 
         //-->Formatting data
-        lastViewed.setCellFactory(lv -> new ListCell<File>(){
+        lastViewed.setCellFactory(lv -> new ListCell<File>(){// TODO: maybe this setCellFactory is useful in the tableview data binding
             @Override public void updateItem(File item, boolean empty){
                 super.updateItem(item, empty);
                 if(empty)
