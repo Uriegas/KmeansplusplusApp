@@ -36,31 +36,54 @@ public class Model implements Serializable {
 
 	//-->Table methods
 	public ObservableList<ObservableList<String>> tableProperty(){
-		return theTable.getItems();
+		return theTable.dataProperty();
 	}
-	public void setTable(ArrayList<List<String>> table){
-        ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();//Excel table in javafx arraylist's
-        List<String> headers = new ArrayList<String>();//Headers of the table
+	public void setTableData(ArrayList<List<String>> table){
+		theTable.clearData();
+		theTable.clearHeaders();
+		theTable.setData(table);
+		ArrayList<String> headers = new ArrayList<String>();
+		for( int i = 0; i < table.get(0).size(); i++)
+			headers.add("Column " + i);
+		theTable.setHeaders(headers);
+        // ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();//Excel table in javafx arraylist's
+        // List<String> headers = new ArrayList<String>();//Headers of the table
 
 		//-->Load data into the table
-        for(int i = 0; i < table.size(); i++)
-            data.add(FXCollections.observableArrayList(table.get(i)));
+        // for(int i = 0; i < table.size(); i++)
+        //     data.add(FXCollections.observableArrayList(table.get(i)));
 
-        theTable.setItems(data);
+        // theTable.setItems(data);
 		//<--Load data into the table
 
         //Create the table columns, set the cell value factory and add the column to the tableview.
-        for (int i = 0; i < table.get(0).size(); i++) {
-            final int curCol = i;
-            final TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-                    "Column " + (i + 1)
-            );
-            column.setCellValueFactory(
-                    param -> new ReadOnlyObjectWrapper<>(param.getValue().get(curCol))
-            );
-            theTable.getColumns().add(column);
-        }
-		theTable.setHeaders((ArrayList<String>)headers);
+        // for (int i = 0; i < table.get(0).size(); i++) {
+        //     final int curCol = i;
+        //     final TableColumn<ObservableList<String>, String> column = new TableColumn<>(
+        //             "Column " + (i + 1)
+        //     );
+        //     column.setCellValueFactory(
+        //             param -> new ReadOnlyObjectWrapper<>(param.getValue().get(curCol))
+        //     );
+        //     theTable.getColumns().add(column);
+        // }
+		// theTable.setHeaders((ArrayList<String>)headers);
+	}
+	public ArrayList<List<String>> getTableData(){
+		return this.theTable.getData();
+	}
+	public ObservableList<String> headersProperty(){
+		return theTable.headersProperty();
+	}
+	public void setHeader(ArrayList<String> headers){
+		theTable.setHeaders(headers);
+	}
+	public ArrayList<String> getHeaders(){
+		return theTable.getHeaders();
+	}
+	//Add a new row to the table
+	public void addRowToTable(ArrayList<String> row){
+		theTable.addRow(row);
 	}
 	//<--Table methods
 
@@ -124,7 +147,7 @@ public class Model implements Serializable {
 		theTable = new Table();
 		//<--Initialize not serialized objects(if not initialized they are null)
     }
-	public Task<String> fileLoaderTask(File fileToLoad){
+	public Task<String> fileLoaderTask(File fileToLoad){//TODO : Add a progress bar, set headers and data 
 		//Create a task to load the file asynchronously
 		Task<String> loadFileTask = new Task<>() {
 			@Override
@@ -132,7 +155,7 @@ public class Model implements Serializable {
 				ArrayList<List<String>> data = new ArrayList<>();
 				if( fileToLoad.getName().endsWith(".xlsx") || fileToLoad.getName().endsWith(".csv") ){
 					data = Utilities.loadFile(fileToLoad);
-					setTable(data);
+					setTableData(data);
 					setFile(fileToLoad);
 				}else{throw new Exception("File format not supported");}
 				System.out.println("Loaded file: " + fileToLoad.getAbsolutePath());
@@ -140,7 +163,7 @@ public class Model implements Serializable {
 			}
 		};
 
-		//If successful, update the text area, display a success message and store the loaded file reference
+		//If the file is sucessfully loaded
 		loadFileTask.setOnSucceeded(workerStateEvent -> {
 			try {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -153,7 +176,7 @@ public class Model implements Serializable {
 			}
 		});
 
-		//If unsuccessful, set text area with error message and status message to failed
+		//If the file failed to load
 		loadFileTask.setOnFailed(workerStateEvent -> {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setTitle("Error");

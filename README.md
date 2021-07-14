@@ -10,6 +10,7 @@ Actividad 5: KMeans distribuido
 6. *Agregar al final* Drag & Drop
 7. Añadir un botón para seleccionar las 2 columnas a graficar su correlación(Nota: a la gráfica hay que añadirle la línea de regresión y el coeficiente de Pearson)
 8. Necesito rediseñar el modelo de tabla, en vez de guardar un objeto TableView creo que puedo hacer un observablelist de olbservablelist's que sea el usado en para la tabla, pero no estoy muy seguro, en mi mente funciona pero tengo que ver bien como se hace el data binding del tableview
+9. La tabla funciona pero tiene problemas ya que no supe implementarla bien: ver el listener agregado al header; quizá tengo que rediseñar la tabla, pero también el programa se crashea con tantos datos, quizá es por el mismo error o tengo que ver más eso de performance.
 
 ### Objetivo de la Práctica
 

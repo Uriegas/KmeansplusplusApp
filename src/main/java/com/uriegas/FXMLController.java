@@ -3,6 +3,7 @@ package com.uriegas;
 import java.io.*;
 import java.util.*;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.*;
 import javafx.concurrent.Task;
 import javafx.fxml.*;
@@ -35,8 +36,38 @@ public class FXMLController extends Window {
         super.initModel(m);
         //-->Data binding
         lastViewed.setItems(this.model.filesProperty());
-        table.setItems(this.model.tableProperty());
+        // table.setItems(this.model.tableProperty());
         currentFile.textProperty().bindBidirectional(this.model.currentFileProperty());
+        //-->Bind the table to the headers of the model's table
+        this.model.headersProperty().addListener(new ListChangeListener<String>() {
+            @Override
+            public void onChanged(ListChangeListener.Change<? extends String> c) {
+                try{
+                table.getColumns().clear();
+                table.getItems().clear();
+                for(String header : c.getList()){
+                    TableColumn<ObservableList<String>, String> column = new TableColumn<>(header);
+                    table.getColumns().add(column);
+                }
+                for(int i = 0; i < table.getColumns().size(); i++){//Add columns cell value factory (styling)
+                    final int j = i;
+                    ((TableColumn<ObservableList<String>,String>)table.getColumns().get(i)).setCellValueFactory(param -> new SimpleStringProperty(param.getValue().get(j)));
+                }
+                table.getItems().addAll(model.tableProperty());
+                }catch(Exception e){System.out.println("An erroroccured while binding the table to the model");}
+            }
+        });
+        table.setItems(this.model.tableProperty());
+        //-->Bind the table to the headersof the model's table
+
+        //-->Bind the data to the table
+        this.model.tableProperty().addListener(new ListChangeListener<ObservableList<String>>() {
+            @Override
+            public void onChanged(ListChangeListener.Change<? extends ObservableList<String>> c) {
+                table.setItems(FXMLController.this.model.tableProperty());
+            }
+        });
+        //<--Bind the data to the table
         //<--Data binding
     }
     /**
@@ -115,6 +146,21 @@ public class FXMLController extends Window {
             }
 
         });
+        // dragAndDrop.setOnMouseClicked(e -> {//Add rows to the table
+        //     if( e.getButton().equals(MouseButton.PRIMARY) )
+        //         if( e.getClickCount() == 1 ){
+                    //In-line arraylist
+                    // model.setHeader(new ArrayList<String>(){{
+                    //     add("Row 1");
+                    // }});
+                    // model.getTableData().clear();
+                    // ArrayList<String> data = new ArrayList<String>(){{
+                    //     for( int i = 0; i < model.getHeaders().size(); i++ )
+                    //         add("Row " + (i+1));
+                    // }};
+                    // model.addRowToTable( data );
+        //         }
+        // });
         //<--Event Handling
 
         //-->Formatting data

@@ -14,6 +14,8 @@ import javafx.stage.*;
  * Main Apllication of the project
  */
 public class MainApp extends Application {
+    // private double xOffset;
+    // private double yOffset;
     /**
      * Data model for the application
      */
@@ -41,6 +43,17 @@ public class MainApp extends Application {
         //-->Create main window
         FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/Scene.fxml"));
         Parent root = loader.load();
+        // root.setOnMousePressed(event -> {
+        //     xOffset = event.getSceneX();
+        //     yOffset = event.getSceneY();
+        //     event.consume();
+        // });
+        // root.setOnMouseDragged(event -> {
+        //     stage.setX(event.getScreenX() - xOffset);
+        //     stage.setY(event.getScreenY() - yOffset);
+        //     event.consume();
+        // });
+
         Scene scene = new Scene(root);
         Window main = loader.getController();
         main.initModel(model);
