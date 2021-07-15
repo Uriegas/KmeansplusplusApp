@@ -208,7 +208,7 @@ public class FXMLController extends Window {
         for(int i = 0; i < x.size(); i++ )
             series1.getData().add(new XYChart.Data<Number, Number>(x.get(i), y.get(i)));
       
-        scatter.getData().addAll(series1);
+        scatter.getData().add(series1);
 
         VBox vb = new VBox(txt, scatter);
         vb.setAlignment(Pos.CENTER);

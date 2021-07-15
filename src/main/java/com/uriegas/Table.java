@@ -55,6 +55,19 @@ public class Table{
 	public void clearHeaders(){
 		this.headers.clear();
 	}
+	public Double[] getRowData( String header ) throws NumberFormatException{
+		//Get the index of the header
+		int index = this.headers.indexOf(header);
+		//Get the data of the row
+		ArrayList<String> rowData = new ArrayList<String>();
+		for(ObservableList<String> row : this.data)
+			rowData.add(row.get(index));
+		//Convert the data to a Double array
+		Double[] data = new Double[rowData.size()];
+		for(int i = 0; i < data.length; i++)
+			data[i] = Double.parseDouble(rowData.get(i));
+		return data;
+	}
 	// @Override public String toString(){
 	// 	String s = "";
 	// 	for( List<String> row : table ){

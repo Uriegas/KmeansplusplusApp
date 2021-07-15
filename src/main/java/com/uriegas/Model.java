@@ -49,6 +49,12 @@ public class Model implements Serializable {
 	public String getVariable2(){
 		return variable2;
 	}
+	public Double[] getVariable1Data(){
+		return theTable.getRowData(variable1);
+	}
+	public Double[] getVariable2Data(){
+		return theTable.getRowData(variable2);
+	}
 	//<--variables methods
 
 	//-->Table methods
