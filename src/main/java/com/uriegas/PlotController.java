@@ -13,23 +13,16 @@ import javafx.stage.*;
  * @author Eduardo Uriegas
  * TODO autoscale axes
  */
-public class PlotController {
+public class PlotController extends Window {
 	@FXML private Label label;
 	@FXML private Button save;
 	@FXML private ScatterChart<Number,Number> chart;
 	/**
-	 * Setup the chart
-	 * @param chart
+	 * Initialize the model
+	 * @param m
 	 */
-	public void setChart(ScatterChart<Number,Number> chart) {
-		this.chart = chart;
-	}
-	/**
-	 * Setup the chart
-	 * @param title
-	 */
-	public void setTitle(String title) {
-		label.setText(title);
+	public void initModel(Model m){
+		super.initModel(m);
 	}
 	/**
 	 * Initialize the controller class.
@@ -60,5 +53,19 @@ public class PlotController {
 	public void autoScale() {
 		chart.getXAxis().setAutoRanging(true);
 		chart.getYAxis().setAutoRanging(true);
+	}
+	/**
+	 * Setup the chart
+	 * @param chart
+	 */
+	public void setChart(ScatterChart<Number,Number> chart) {
+		this.chart = chart;
+	}
+	/**
+	 * Setup the chart
+	 * @param title
+	 */
+	public void setTitle(String title) {
+		label.setText(title);
 	}
 }

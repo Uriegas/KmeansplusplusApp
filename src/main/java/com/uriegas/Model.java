@@ -33,6 +33,23 @@ public class Model implements Serializable {
 			}
 		}
 	};
+	private transient String variable1 = "";
+	private transient String variable2 = "";
+
+	//-->variables methods
+	public void setVariable1(String variable1){
+		this.variable1 = variable1;
+	}
+	public String getVariable1(){
+		return variable1;
+	}
+	public void setVariable2(String variable2){
+		this.variable2 = variable2;
+	}
+	public String getVariable2(){
+		return variable2;
+	}
+	//<--variables methods
 
 	//-->Table methods
 	public ObservableList<ObservableList<String>> tableProperty(){
