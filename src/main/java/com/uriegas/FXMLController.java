@@ -146,12 +146,37 @@ public class FXMLController extends Window {
                 System.out.println("about button clicked");
                 //<--Show about dialog
         });
+        //TODO: add error handling
         plotCorrelation.setOnMouseClicked(e ->{//When plot correlation is clicked show correlation plot
-            //-->Show correlation plot
-            // NumberAxis yAxis = new NumberAxis(-100, 500, 100);
             System.out.println("plot correlation clicked");
-            createPopUp(e, "plot.fxml");
-            // NumberAxis xAxis = new NumberAxis(0, 10, 1);
+            //-->Set the data
+            // createPopUp(e, model, "SelectVariables.fxml");
+            //Quick fix for the set data: Create a choice box dialog
+            ChoiceDialog<String> choiceBox = new ChoiceDialog<String>();
+            choiceBox.getItems().addAll(this.model.getHeaders());
+            choiceBox.setTitle("Select variable");
+            choiceBox.setHeaderText("Select variable to graph in x-axis");
+            choiceBox.setContentText("Choose a variable");
+
+            choiceBox.showAndWait().ifPresent(var -> {
+                System.out.println("Variable: " + var);
+                this.model.setVariable1(var);
+            });
+
+            ChoiceDialog<String> choiceBox2 = new ChoiceDialog<String>();
+            choiceBox2.getItems().addAll(this.model.getHeaders());
+            choiceBox2.setTitle("Select variable");
+            choiceBox2.setHeaderText("Select variable to graph in y-axis");
+            choiceBox2.setContentText("Choose a variable");
+
+            choiceBox2.showAndWait().ifPresent(var -> {
+                System.out.println("Variable: " + var);
+                this.model.setVariable2(var);
+            });
+            //<--Set the data
+
+            //-->Show correlation plot
+            createPopUp(e, model, "Plot.fxml");
             //<--Show correlation plot
         });
         //<--Event Handling
