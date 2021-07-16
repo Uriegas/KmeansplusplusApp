@@ -68,13 +68,4 @@ public class Table{
 			data[i] = Double.parseDouble(rowData.get(i));
 		return data;
 	}
-	// @Override public String toString(){
-	// 	String s = "";
-	// 	for( List<String> row : table ){
-	// 		for( String cell : row )
-	// 			s += cell + ", ";
-	// 		s += '\n';
-	// 	}
-	// 	return s;
-	// }
 }

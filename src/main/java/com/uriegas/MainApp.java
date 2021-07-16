@@ -3,7 +3,6 @@ package com.uriegas;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
-
 import javafx.application.*;
 import javafx.fxml.*;
 import javafx.scene.*;
@@ -14,8 +13,6 @@ import javafx.stage.*;
  * Main Apllication of the project
  */
 public class MainApp extends Application {
-    // private double xOffset;
-    // private double yOffset;
     /**
      * Data model for the application
      */
@@ -43,17 +40,6 @@ public class MainApp extends Application {
         //-->Create main window
         FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/Scene.fxml"));
         Parent root = loader.load();
-        // root.setOnMousePressed(event -> {
-        //     xOffset = event.getSceneX();
-        //     yOffset = event.getSceneY();
-        //     event.consume();
-        // });
-        // root.setOnMouseDragged(event -> {
-        //     stage.setX(event.getScreenX() - xOffset);
-        //     stage.setY(event.getScreenY() - yOffset);
-        //     event.consume();
-        // });
-
         Scene scene = new Scene(root);
         Window main = loader.getController();
         main.initModel(model);
@@ -98,7 +84,6 @@ public class MainApp extends Application {
             System.out.println("Couldn't serialize data to: " + file.getAbsolutePath());
         }
     }
-
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be
@@ -110,5 +95,4 @@ public class MainApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }

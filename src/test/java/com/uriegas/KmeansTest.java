@@ -1,16 +1,10 @@
 package com.uriegas;
 
 import static org.junit.Assert.assertEquals;
-
-import java.io.*;
 import java.util.*;
-
 import org.junit.*;
-import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
-import javafx.geometry.Point2D;
 /**
  * Test kmeans
  */
@@ -18,7 +12,7 @@ import javafx.geometry.Point2D;
 public class KmeansTest {
     String path;//The path to read
     int k;
-    List<Kmeans.Point2D> data;//The data to test
+    List<Kmeans.Point> data;//The data to test
     /**
      * Before instantiating this class run this setUp
      */
@@ -30,9 +24,10 @@ public class KmeansTest {
      * @param e
      * @param k
      */
-    public KmeansTest(String e, int k){
+    public KmeansTest(String e, int k) throws Exception{
         this.path = e;
         this.k = k;
+        data = Kmeans.getDataSets(path);
     }
     /**
      * Parameters to add to the constructor @see{@link com.uriegas.Kmeans#get_centroids(ArrayList, int)}
@@ -47,17 +42,21 @@ public class KmeansTest {
                 // {"/datasets/data3.csv", 2},
                 // {"/datasets/data4.csv", 7},
                 // {"/datasets/data5.csv", 2},
-                {System.getProperty("user.dir") + "/src/main/resources/datasets/dataset.csv", 15}
+                {System.getProperty("user.dir") + "/src/main/resources/datasets/dataset3D.csv", 15},
+                {System.getProperty("user.dir") + "/src/main/resources/datasets/dataset2D.csv", 5},
+                {System.getProperty("user.dir") + "/src/main/resources/datasets/smalldataset2D.csv", 5}
             }
         );
 	}
     /**
-     * Load the data from the file
+     * Load n-dimensional data from the file
      */
     @Test
-    public void testLoadData() throws Exception{
-        data = Kmeans.getDataset(path);
-        // assertEquals(data.size(), Kmeans.getDataset(path).size());
+    public void testLoadDatas() throws Exception{
+        List<Kmeans.Point> data = Kmeans.getDataSets(path);
+        Kmeans.printData(data);
+        //Test that it does not throw an exception
+        // assertNoException(Kmeans2.getDataset(path));
     }
     /**
      * Test classical centroids
@@ -68,13 +67,21 @@ public class KmeansTest {
         long time = System.currentTimeMillis();
 
         //-->Run and mesuare code performance
-		Kmeans.get_random_centroids(data, k);
-        //<--Run and mesuare code performance
-
+		List<Kmeans.Point> centroids = Kmeans.initializeRandomCenters(k, data.get(0).size());
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
+        //Expected result: 5 centroids of 3 dimensions
+        assertEquals(k,centroids.size());//Check 5  centroids returned
+        for(int i = 0; i < centroids.size(); i++){//for each centroid
+            Kmeans.Point point = centroids.get(i);
+            assertEquals(data.get(0).size(), point.size());//Check the dimensions
+        }
+        //<--Run and mesuare code performance
     }
     /**
-     * Test centroids with kmeans++
+     * Test centroids with kmeans++<p>
+     * Implementating the algorithm from:<br>
+     * http://ilpubs.stanford.edu:8090/778/1/2006-13.pdf<br>
+     * https://github.com/JasonAltschuler/KMeansPlusPlus/blob/master/src/KMeans.java
      */
     @Test
     public void testCentroids_plus_plus(){
@@ -82,7 +89,7 @@ public class KmeansTest {
         long time = System.currentTimeMillis();
 
         //-->Run and mesuare code performance
-		Kmeans.get_centroids(data, k);
+		Kmeans.initializeCentersplusplus(k, data);
         //<--Run and mesuare code performance
 
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
@@ -96,55 +103,27 @@ public class KmeansTest {
         long time = System.currentTimeMillis();
 
         //-->Run and mesuare code performance
-        data = Kmeans.getDataset(path);
-		List<Kmeans.Point2D> result = Kmeans.classicKmeans(data, k);
+        // data = Kmeans.getDataset(path);
+		List<Kmeans.Point> result = Kmeans.kmeans(data, k);
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
+        System.out.println(result);
         //<--Run and mesuare code performance
-        System.out.println("Result:");
-        for(Kmeans.Point2D p : result)
-            System.out.print(p.toString() + " ");
 
+        // System.out.println("Result:");
+        // for(Kmeans2.Point2D p : result)
+        //     System.out.println(p.toString() + " ");
     }
     /**
      * Test classical kmeans distributed algorithm
      */
     @Test
-    public void testKmeans_distributed(){
+    public void testKmeans_distributed() throws Exception{
         System.out.println("Kmeans test");
         long time = System.currentTimeMillis();
 
         //-->Run and mesuare code performance
-		Kmeans.classic_kmeans(data, k);
-        //<--Run and mesuare code performance
-
+		Kmeans.concurrentKmeans(data, k);
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
-    }
-    /**
-     * Test kmeans++ algorithm
-     */
-    @Test
-    public void testKmeans_plus_plus(){
-        System.out.println("Kmeans++ test");
-        long time = System.currentTimeMillis();
-
-        //-->Run and mesuare code performance
-		Kmeans.k_means_plus_plus(data, k);
         //<--Run and mesuare code performance
-
-        System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
-    }
-    /**
-     * Test kmeans++ distributed algorithm
-     */
-    @Test
-    public void testKmeans_plus_plus_distributed(){
-        System.out.println("Kmeans++ test");
-        long time = System.currentTimeMillis();
-
-        //-->Run and mesuare code performance
-		Kmeans.k_means_plus_plus_distributed(data, k);
-        //<--Run and mesuare code performance
-
-        System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
     }
 }

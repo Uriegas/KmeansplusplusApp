@@ -97,28 +97,6 @@ public class Model implements Serializable {
 		for( int i = 0; i < table.get(0).size(); i++)
 			headers.add("Column " + i);
 		theTable.setHeaders(headers);
-        // ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();//Excel table in javafx arraylist's
-        // List<String> headers = new ArrayList<String>();//Headers of the table
-
-		//-->Load data into the table
-        // for(int i = 0; i < table.size(); i++)
-        //     data.add(FXCollections.observableArrayList(table.get(i)));
-
-        // theTable.setItems(data);
-		//<--Load data into the table
-
-        //Create the table columns, set the cell value factory and add the column to the tableview.
-        // for (int i = 0; i < table.get(0).size(); i++) {
-        //     final int curCol = i;
-        //     final TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-        //             "Column " + (i + 1)
-        //     );
-        //     column.setCellValueFactory(
-        //             param -> new ReadOnlyObjectWrapper<>(param.getValue().get(curCol))
-        //     );
-        //     theTable.getColumns().add(column);
-        // }
-		// theTable.setHeaders((ArrayList<String>)headers);
 	}
 	public ArrayList<List<String>> getTableData(){
 		return this.theTable.getData();
