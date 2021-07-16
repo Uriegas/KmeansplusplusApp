@@ -1,5 +1,6 @@
 package com.uriegas;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -56,7 +57,55 @@ public class Kmeans {
 		return centroids;
 	}
 	//-->Kmeans for 2D datasets
-	class Point2D{
+	/**
+	 * Kmeans implementation using a 2D dataset and without threading
+	 * @param data the 2D dataset
+	 * @param k the number of clusters
+	 * @return a list of centroids with the new positions
+	 */
+	public static List<Point2D> classicKmeans(List<Point2D> data, int k){
+		List<Point2D> centers = new ArrayList<Point2D>();
+		boolean converge;
+		do{
+			List<Point2D> newCenters = getNewCenters(data, centers);
+			double distance = getDistance(centers, newCenters);
+			centers = newCenters;
+			converge = distance == 0;
+		}while(!converge);
+		return centers;
+	}
+	public static List<Point2D> initializeRandomCenters(int n, int low, int high){
+		List<Point2D> points = new ArrayList<Point2D>(n);
+		for(int i = 0; i < n; i++){
+			Double x = Math.random() * (high - low) + low;
+			Double y = Math.random() * (high - low) + low;
+			points.add(new Point2D(x, y));
+		}
+		return points;
+	}
+	public static List<Point2D> getNewCenters(List<Point2D> dataset, List<Point2D> centers){
+		List<List<Point2D>> clusters = new ArrayList<>(centers.size());
+		for (int i = 0; i < centers.size(); i++) {
+			clusters.add(new ArrayList<Point2D>());
+		}
+		for (Point2D data : dataset) {
+			int index = data.getNearestPointIndex(centers);
+			clusters.get(index).add(data);
+		}
+		List<Point2D> newCenters = new ArrayList<>(centers.size());
+		for (List<Point2D> cluster : clusters) {
+			newCenters.add(Point2D.getMean(cluster));
+		}
+		return newCenters;
+	}
+	public static double getDistance(List<Point2D> centers, List<Point2D> newCenters){
+		double distance = 0;
+		for(int i = 0; i < centers.size(); i++){
+			distance += centers.get(i).getDistance(newCenters.get(i));
+		}
+		return distance;
+	}
+	public static class Point2D{
 		private double x;
 		private double y;
 		public Point2D(double x, double y){
@@ -69,6 +118,10 @@ public class Kmeans {
 		public double getY(){
 			return y;
 		}
+		/**
+		 * Euclidean distance between two points
+		 * TODO: euclidean distance between n points
+		 */
 		private double getDistance(Point2D point){
 			return Math.sqrt(Math.pow(x - point.getX(), 2) + Math.pow(y - point.getY(), 2));
 		}
@@ -76,7 +129,7 @@ public class Kmeans {
 			int index = -1;
 			double min = Double.MAX_VALUE;
 			for(int i = 0; i < points.size(); i++){
-				double distance = getDistance(points.get(i));
+				double distance = this.getDistance(points.get(i));
 				if(distance < min){
 					min = distance;
 					index = i;
@@ -84,7 +137,7 @@ public class Kmeans {
 			}
 			return index;
 		}
-		public Point2D getMean(List<Point2D> points){
+		public static Point2D getMean(List<Point2D> points){
 			double x = 0;
 			double y = 0;
 			for(Point2D point : points){
@@ -107,4 +160,21 @@ public class Kmeans {
 		}
 	}
 	//<--Kmeans for 2D datasets
+
+	//-->2D Points data loader
+	public static List<Point2D> getDataset(String inputFile) throws Exception {
+		List<Point2D> dataset = new ArrayList<>();
+		BufferedReader br = new BufferedReader(new FileReader(inputFile));
+		String line;
+		while ((line = br.readLine()) != null) {
+			String[] tokens = line.split(",");
+			float x = Float.valueOf(tokens[0]);
+			float y = Float.valueOf(tokens[1]);
+			Point2D point = new Point2D(x, y);
+			for (int i = 0; i < 200; i++)//TODO: Erase this for loop
+				dataset.add(point);
+		}
+		br.close();
+		return dataset;
+	}
 }

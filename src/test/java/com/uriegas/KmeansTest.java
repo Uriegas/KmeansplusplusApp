@@ -9,20 +9,21 @@ import org.junit.*;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
+import javafx.geometry.Point2D;
 /**
  * Test kmeans
  */
 @RunWith(Parameterized.class)
 public class KmeansTest {
     String path;//The path to read
-    Kmeans kmeans;
     int k;
+    List<Kmeans.Point2D> data;//The data to test
     /**
      * Before instantiating this class run this setUp
      */
     @Before
     public void setUp(){
-        kmeans = new Kmeans();
     }
     /**
      * Constructor with parameter injection
@@ -41,14 +42,23 @@ public class KmeansTest {
     public static Collection<Object[]> getTestData(){
 		return Arrays.asList(
             new Object[][]{//path and k
-                {"/datasets/mcdonalds.csv", 9},
-                {"/datasets/walmart.csv", 8},
-                {"/datasets/data3.csv", 2},
-                {"/datasets/data4.csv", 7},
-                {"/datasets/data5.csv", 2},
+                // {"/datasets/mcdonalds.csv", 9},
+                // {"/datasets/walmart.csv", 8},
+                // {"/datasets/data3.csv", 2},
+                // {"/datasets/data4.csv", 7},
+                // {"/datasets/data5.csv", 2},
+                {System.getProperty("user.dir") + "/src/main/resources/datasets/dataset.csv", 15}
             }
         );
 	}
+    /**
+     * Load the data from the file
+     */
+    @Test
+    public void testLoadData() throws Exception{
+        data = Kmeans.getDataset(path);
+        // assertEquals(data.size(), Kmeans.getDataset(path).size());
+    }
     /**
      * Test classical centroids
      */
@@ -58,7 +68,7 @@ public class KmeansTest {
         long time = System.currentTimeMillis();
 
         //-->Run and mesuare code performance
-		kmeans.get_random_centroids(data, k);
+		Kmeans.get_random_centroids(data, k);
         //<--Run and mesuare code performance
 
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
@@ -72,7 +82,7 @@ public class KmeansTest {
         long time = System.currentTimeMillis();
 
         //-->Run and mesuare code performance
-		kmeans.get_centroids(data, k);
+		Kmeans.get_centroids(data, k);
         //<--Run and mesuare code performance
 
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
@@ -81,15 +91,19 @@ public class KmeansTest {
      * Test classical kmeans algorithm
      */
     @Test
-    public void testKmeans(){
+    public void testKmeans() throws Exception{
         System.out.println("Kmeans test");
         long time = System.currentTimeMillis();
 
         //-->Run and mesuare code performance
-		kmeans.classic_kmeans(data, k);
-        //<--Run and mesuare code performance
-
+        data = Kmeans.getDataset(path);
+		List<Kmeans.Point2D> result = Kmeans.classicKmeans(data, k);
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
+        //<--Run and mesuare code performance
+        System.out.println("Result:");
+        for(Kmeans.Point2D p : result)
+            System.out.print(p.toString() + " ");
+
     }
     /**
      * Test classical kmeans distributed algorithm
@@ -100,7 +114,7 @@ public class KmeansTest {
         long time = System.currentTimeMillis();
 
         //-->Run and mesuare code performance
-		kmeans.classic_kmeans(data, k);
+		Kmeans.classic_kmeans(data, k);
         //<--Run and mesuare code performance
 
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
@@ -114,7 +128,7 @@ public class KmeansTest {
         long time = System.currentTimeMillis();
 
         //-->Run and mesuare code performance
-		kmeans.k_means_plus_plus(data, k);
+		Kmeans.k_means_plus_plus(data, k);
         //<--Run and mesuare code performance
 
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
@@ -128,7 +142,7 @@ public class KmeansTest {
         long time = System.currentTimeMillis();
 
         //-->Run and mesuare code performance
-		kmeans.k_means_plus_plus_distributed(data, k);
+		Kmeans.k_means_plus_plus_distributed(data, k);
         //<--Run and mesuare code performance
 
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
