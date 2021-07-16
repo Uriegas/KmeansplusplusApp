@@ -89,7 +89,13 @@ public class Utilities {
 		}
 		return isEmpty;
 	}
-	//Get the pearson coeficient between two vectors
+	/**
+	 * Get the pearson coeficient between two vectors
+	 * @param x
+	 * @param y
+	 * @return pearson coefficient
+	 * @author RodneyShang
+	 */
 	public static Double getCorrelation(Double[] x, Double[] y){
 		if (x == null || y == null || x.length != y.length) {
             return null;

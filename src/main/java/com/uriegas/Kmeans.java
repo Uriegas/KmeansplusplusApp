@@ -14,7 +14,7 @@ public class Kmeans {
 	 * @param data
 	 * @param centroids the centroids ej. {@code (2, 3); (4, 5, 1)}
 	 * @param k the number of clusters
-	 * @return the new position of the centroids
+	 * @return a list of centroids with the new positions
 	 */
 	public List<Centroid> k_means_plus_plus(ArrayList<List<Double>> data, int k){
 		// Pseudocode:
@@ -55,4 +55,56 @@ public class Kmeans {
 		}
 		return centroids;
 	}
+	//-->Kmeans for 2D datasets
+	class Point2D{
+		private double x;
+		private double y;
+		public Point2D(double x, double y){
+			this.x = x;
+			this.y = y;
+		}
+		public double getX(){
+			return x;
+		}
+		public double getY(){
+			return y;
+		}
+		private double getDistance(Point2D point){
+			return Math.sqrt(Math.pow(x - point.getX(), 2) + Math.pow(y - point.getY(), 2));
+		}
+		public int getNearestPointIndex(List<Point2D> points){
+			int index = -1;
+			double min = Double.MAX_VALUE;
+			for(int i = 0; i < points.size(); i++){
+				double distance = getDistance(points.get(i));
+				if(distance < min){
+					min = distance;
+					index = i;
+				}
+			}
+			return index;
+		}
+		public Point2D getMean(List<Point2D> points){
+			double x = 0;
+			double y = 0;
+			for(Point2D point : points){
+				x += point.getX();
+				y += point.getY();
+			}
+			return new Point2D(x / points.size(), y / points.size());
+		}
+		@Override
+		public String toString(){
+			return "("+x+", "+y+")";
+		}
+		@Override
+		public boolean equals(Object o){
+			if(o instanceof Point2D){
+				Point2D p = (Point2D)o;
+				return p.x == x && p.y == y;
+			}
+			return false;
+		}
+	}
+	//<--Kmeans for 2D datasets
 }

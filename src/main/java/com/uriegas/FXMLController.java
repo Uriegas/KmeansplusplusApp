@@ -199,7 +199,15 @@ public class FXMLController extends Window {
      */
     public void plotGraph(){
         //Create the scatter plot with variable axises
-        ScatterChart<Number, Number> chart = new ScatterChart<Number, Number>(new NumberAxis(model.getVariable1Min()*0.8, model.getVariable1Max()*1.2, 10), new NumberAxis(model.getVariable2Min()*0.8, model.getVariable2Max()*1.2, 10));
+        ScatterChart<Number, Number> chart = new ScatterChart<Number, Number>(
+            new NumberAxis(
+                model.getVariable1Min()*0.8, 
+                model.getVariable1Max()*1.1,
+                ((model.getVariable1Max() + model.getVariable1Min()) / 10)),
+            new NumberAxis(
+                model.getVariable2Min()*0.8,
+                model.getVariable2Max()*1.1, 
+                ((model.getVariable2Max() + model.getVariable2Min()) / 10)));
         //Load data from the model
 		Number[] xData = (Number[]) model.getVariable1Data();
 		Number[] yData = (Number[]) model.getVariable2Data();
