@@ -21,12 +21,14 @@ public class PlotController extends Window {
 	 * Initialize the model
 	 * @param m
 	 */
-	public void initModel(Model m){
+	public void initModel(Model m){// TODO: Fix plot, we already got the data, know we need to plot it
 		super.initModel(m);
 		//-->Set the chart with the data of the model
 		//Create arrays with the data
 		Number[] xData = (Number[]) model.getVariable1Data();
 		Number[] yData = (Number[]) model.getVariable2Data();
+		// Number[] xData = {1,2,3};
+		// Number[] yData = {1,2,3};
 
 		NumberAxis xAxis = new NumberAxis();
 		NumberAxis yAxis = new NumberAxis();
@@ -34,7 +36,7 @@ public class PlotController extends Window {
 		yAxis.setLabel(model.getVariable2());
 		chart.setTitle("This char");
         XYChart.Series<Number,Number> serie = new XYChart.Series<Number,Number>();
-		serie.setName("Correlation: " + model.getVariable1() + " and " + model.getVariable2());
+		// serie.setName("Correlation: " + model.getVariable1() + " and " + model.getVariable2());
 		for(int j=0;j<model.getTableData().size();j++)//Add the data to the serie
 			serie.getData().add(new XYChart.Data<Number,Number>(xData[j],yData[j]));
 		chart.getData().add(serie);//Add the serie to the chart
@@ -60,7 +62,7 @@ public class PlotController extends Window {
 				System.out.println("No file selected");
 			}
 		});
-		autoScale();
+		// autoScale();
 	}
 	/**
 	 * Method to autoscale axes

@@ -55,6 +55,34 @@ public class Model implements Serializable {
 	public Double[] getVariable2Data(){
 		return theTable.getRowData(variable2);
 	}
+	public Double getVariable1Max(){
+		Double max = getVariable1Data()[0];
+		for( Double i : getVariable1Data())
+			if(i>max)
+				max = i;
+		return max;
+	}
+	public Double getVariable2Max(){
+		Double max = getVariable2Data()[0];
+		for( Double i : getVariable2Data())
+			if(i>max)
+				max = i;
+		return max;
+	}
+	public Double getVariable1Min(){
+		Double min = getVariable1Data()[0];
+		for( Double i : getVariable1Data())
+			if(i<min)
+				min = i;
+		return min;
+	}
+	public Double getVariable2Min(){
+		Double min = getVariable2Data()[0];
+		for( Double i : getVariable2Data())
+			if(i<min)
+				min = i;
+		return min;
+	}
 	//<--variables methods
 
 	//-->Table methods

@@ -15,6 +15,8 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.*;
+import javax.imageio.*;
+import javafx.embed.swing.*;
 /**
  * Controller of the Scene view
  */
@@ -134,9 +136,6 @@ public class FXMLController extends Window {
 
                 //-->Show kmeas++ aggrupation
                 //TODO: call utility function to analize data
-                List<Double> x = Arrays.asList(Double.valueOf(14.2), Double.valueOf(48.2), Double.valueOf(14.7));
-                List<Double> y = Arrays.asList(Double.valueOf(14.2), Double.valueOf(48.2), Double.valueOf(14.7));
-                plotScatter(x, y);
                 //<--Show kmeas++ aggrupation
                 System.out.println("apply kmeans clicked, k is " + ( input.isPresent() ? input.get() : "nothig") );
         });
@@ -176,7 +175,8 @@ public class FXMLController extends Window {
             //<--Set the data
 
             //-->Show correlation plot
-            createPopUp(e, model, "Plot.fxml");
+            // createPopUp(e, model, "Plot.fxml");
+            plotGraph();
             //<--Show correlation plot
         });
         //<--Event Handling
@@ -193,29 +193,54 @@ public class FXMLController extends Window {
         });
         //<--Formatting data
     }
+    /**
+     * Create a pop up window with a correlation plot
+     * TODO: plot regression line
+     */
+    public void plotGraph(){
+        //Create the scatter plot with variable axises
+        ScatterChart<Number, Number> chart = new ScatterChart<Number, Number>(new NumberAxis(model.getVariable1Min()*0.8, model.getVariable1Max()*1.2, 10), new NumberAxis(model.getVariable2Min()*0.8, model.getVariable2Max()*1.2, 10));
+        //Load data from the model
+		Number[] xData = (Number[]) model.getVariable1Data();
+		Number[] yData = (Number[]) model.getVariable2Data();
+        //Create the scatter plot with variable axises
+		NumberAxis xAxis = new NumberAxis();
+		NumberAxis yAxis = new NumberAxis();
+		xAxis.setLabel(model.getVariable1());
+		yAxis.setLabel(model.getVariable2());
+        chart.setTitle( "R = " + Utilities.getCorrelation(model.getVariable1Data(), model.getVariable2Data()).toString() );
+        XYChart.Series<Number,Number> serie = new XYChart.Series<Number,Number>();
+        //Populate the scatter plot with data
+		for(int j=0;j<model.getTableData().size();j++)//Add the data to the serie
+			serie.getData().add(new XYChart.Data<Number,Number>(xData[j],yData[j]));
+		chart.getData().add(serie);//Add the serie to the chart
+        //Mange stage
 
-    static void plotScatter(List<Double> x, List<Double> y){
-        Text txt = new Text("Scatter(x,y)");
-        NumberAxis xAxis = new NumberAxis(0, 10, 1);
-        NumberAxis yAxis = new NumberAxis(-100, 500, 100);
-        ScatterChart<Number, Number> scatter = new ScatterChart<Number, Number>(xAxis, yAxis);
-        xAxis.setLabel("x");
-        yAxis.setLabel("y");
-        scatter.setTitle("Scatter(x,y)");
+        //-->Save the chart button
+        Button save = new Button("Save");
+        save.setOnMouseClicked(e ->{//Save the chart
+			FileChooser fc = new FileChooser();
+			fc.setTitle("Save chart as");
+			fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG", "*.png"));
+			File file = fc.showSaveDialog(null);
+			if (file != null) {
+				try {//Save ScatterChart as PNG in the file
+				ImageIO.write(SwingFXUtils.fromFXImage(((Node)e.getSource()).getScene().snapshot(null), null), "png", file);
+				System.out.println("Saved chart to " + file.getAbsolutePath());
+				}catch (IOException ex) {System.err.println("Error saving chart to file: " + ex.getMessage());} 
+			}else{
+				System.out.println("No file selected");
+			}
+		});
+        //<--Save the chart button
 
-        XYChart.Series<Number,Number> series1 = new XYChart.Series<Number,Number>();
-        series1.setName("Data");
-        for(int i = 0; i < x.size(); i++ )
-            series1.getData().add(new XYChart.Data<Number, Number>(x.get(i), y.get(i)));
-      
-        scatter.getData().add(series1);
-
-        VBox vb = new VBox(txt, scatter);
+        HBox hb = new HBox(save);
+        hb.setAlignment(Pos.CENTER_RIGHT);
+        VBox vb = new VBox(hb, chart);
         vb.setAlignment(Pos.CENTER);
         vb.setPadding(new Insets(10, 10, 10, 10));
-
         Stage s = new Stage();
-        s.setTitle("Scatter graph");
+		s.setTitle("Correlation: " + model.getVariable1() + " and " + model.getVariable2());
         s.setScene(new Scene(vb, 400, 400));
         s.show();
     }

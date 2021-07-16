@@ -89,4 +89,41 @@ public class Utilities {
 		}
 		return isEmpty;
 	}
+	//Get the pearson coeficient between two vectors
+	public static Double getCorrelation(Double[] x, Double[] y){
+		if (x == null || y == null || x.length != y.length) {
+            return null;
+        }
+        double xMean = getMean(x);
+        double yMean = getMean(x);
+        int n = x.length;
+        
+        double numerator = 0;
+        for (int i = 0; i < n; i++)
+            numerator += (x[i] - xMean) * (y[i] - yMean);
+        return numerator / (n * standardDeviation(x) * standardDeviation(y));
+	}
+	private static Double getMean(Double[] array) {
+        if (array == null) {
+            return null;
+        }
+        double total = 0;
+        for (double num : array) {
+            total += num;
+        }
+        return total / array.length;
+    }
+
+    private static Double standardDeviation(Double[] array) {
+        if (array == null) {
+            return null;
+        }
+        double mean = getMean(array);
+        double sum = 0;
+        for (double x : array) {
+            sum += Math.pow(x - mean, 2);
+        }
+        double variance = sum / array.length;
+        return Math.sqrt(variance);
+    }
 }
