@@ -1,12 +1,8 @@
 package com.uriegas;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
 /**
  * Kmeans implementations <p>
  * Concurrent and non-concurrent versions.
@@ -134,6 +130,19 @@ public class Kmeans{
         br.close();
         return dataset;
     }
+    public static List<Point> getDataSets(ArrayList<List<String>> table) throws Exception {
+        List<Point> dataset = new ArrayList<>();
+        for (List<String> row : table) {
+            double[] point = new double[row.size()];
+            for (int i = 0; i < point.length; i++)
+                point[i] = Double.parseDouble(row.get(i));
+            dataset.add(new Point(point));
+            // for (int i = 0; i < REPLICATION_FACTOR; i++)
+            //     dataset.add(new Point(point));
+        }
+        return dataset;
+    }
+
   /**
    * A 2D point
    * @deprecated
@@ -372,6 +381,20 @@ public class Kmeans{
       } while (!converged);
       return centers;
   }
+    /**
+     * Create a map of the points to their nearest centroid
+     */
+    public static Map<Integer, List<Point>> getClusters(List<Point> centers, List<Point> data){
+        Map<Integer, List<Point>> clusters = new HashMap<Integer, List<Point>>();
+        for(int i = 0; i < centers.size(); i++){
+            clusters.put(i, new ArrayList<Point>());
+        }
+        for(Point p : data){
+            int index = p.getNearestPointIndex(centers);
+            clusters.get(index).add(p);
+        }
+        return clusters;
+    }
   
   public static void main(String[] args) {
       String inputFile = "/home/uriegas/Downloads/dataset.csv";

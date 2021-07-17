@@ -121,6 +121,7 @@ public class FXMLController extends Window {
                 popup.getDialogPane().setContentText("K: ");
                 popup.getEditor().setTextFormatter(new TextFormatter<>(c ->{//Allow only positive integers
                     if (c.isContentChange()) {
+                        //Allow text of maximum length of 2
                         if (c.getControlNewText().length() == 0)
                             return c;
                         try {
@@ -131,13 +132,26 @@ public class FXMLController extends Window {
                     }
                     return c;
                 }));
-                Optional<String> input = popup.showAndWait();
+                Optional<String> k = popup.showAndWait();
                 //<--Show: select k dialog
 
                 //-->Show kmeas++ aggrupation
-                //TODO: call utility function to analize data
+                try{
+                    List<Kmeans.Point> dat = Kmeans.getDataSets(model.getTableData());
+                    List<Kmeans.Point> points = Kmeans.concurrentKmeans(dat, Integer.parseInt(k.get()));
+                    Map<Integer, List<Kmeans.Point>> clusters = Kmeans.getClusters(points, dat);
+                    plotClusters(clusters);
+                }catch(Exception exception){
+                    System.out.println("An error occured while applying kmeans++");
+                    //Show error pop up
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("An error occured while applying kmeans++");
+                    alert.setContentText("Please try again");
+                    alert.showAndWait();
+                }
                 //<--Show kmeas++ aggrupation
-                System.out.println("apply kmeans clicked, k is " + ( input.isPresent() ? input.get() : "nothig") );
+                System.out.println("apply kmeans clicked, k is " + ( k.isPresent() ? k.get() : "nothig") );
         });
         about.setOnMouseClicked(e ->{//When about is clicked show explanation of the program
                 //-->Show about dialog
@@ -222,6 +236,63 @@ public class FXMLController extends Window {
 		for(int j=0;j<model.getTableData().size();j++)//Add the data to the serie
 			serie.getData().add(new XYChart.Data<Number,Number>(xData[j],yData[j]));
 		chart.getData().add(serie);//Add the serie to the chart
+        //Mange stage
+
+        //-->Save the chart button
+        Button save = new Button("Save");
+        save.setOnMouseClicked(e ->{//Save the chart
+			FileChooser fc = new FileChooser();
+			fc.setTitle("Save chart as");
+			fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG", "*.png"));
+			File file = fc.showSaveDialog(null);
+			if (file != null) {
+				try {//Save ScatterChart as PNG in the file
+				ImageIO.write(SwingFXUtils.fromFXImage(((Node)e.getSource()).getScene().snapshot(null), null), "png", file);
+				System.out.println("Saved chart to " + file.getAbsolutePath());
+				}catch (IOException ex) {System.err.println("Error saving chart to file: " + ex.getMessage());} 
+			}else{
+				System.out.println("No file selected");
+			}
+		});
+        //<--Save the chart button
+
+        HBox hb = new HBox(save);
+        hb.setAlignment(Pos.CENTER_RIGHT);
+        VBox vb = new VBox(hb, chart);
+        vb.setAlignment(Pos.CENTER);
+        vb.setPadding(new Insets(10, 10, 10, 10));
+        Stage s = new Stage();
+		s.setTitle("Correlation: " + model.getVariable1() + " and " + model.getVariable2());
+        s.setScene(new Scene(vb, 400, 400));
+        s.show();
+    }
+    public void plotClusters(Map<Integer, List<Kmeans.Point>> clusters){
+        //Create the scatter plot with variable axises
+        ScatterChart<Number, Number> chart = new ScatterChart<Number, Number>(
+            new NumberAxis(
+                model.getVariable1Min()*0.8, 
+                model.getVariable1Max()*1.1,
+                ((model.getVariable1Max() + model.getVariable1Min()) / 10)),
+            new NumberAxis(
+                model.getVariable2Min()*0.8,
+                model.getVariable2Max()*1.1, 
+                ((model.getVariable2Max() + model.getVariable2Min()) / 10)));
+        //Load data from the model
+		Number[] xData = (Number[]) model.getVariable1Data();
+		Number[] yData = (Number[]) model.getVariable2Data();
+        //Create the scatter plot with variable axises
+		NumberAxis xAxis = new NumberAxis();
+		NumberAxis yAxis = new NumberAxis();
+		xAxis.setLabel(model.getVariable1());
+		yAxis.setLabel(model.getVariable2());
+        chart.setTitle("Clusters (k):" + clusters.size());
+        //Populate the scatter plot with the cluster
+        for(int i=0;i<clusters.size();i++){
+            XYChart.Series<Number,Number> serie = new XYChart.Series<Number,Number>();
+            for(Kmeans.Point p : clusters.get(i))
+                serie.getData().add(new XYChart.Data<Number,Number>(p.get(0),p.get(1)));//Can only graph 2D data
+            chart.getData().add(serie);
+        }
         //Mange stage
 
         //-->Save the chart button

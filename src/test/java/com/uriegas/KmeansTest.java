@@ -1,6 +1,8 @@
 package com.uriegas;
 
 import static org.junit.Assert.assertEquals;
+
+import java.io.*;
 import java.util.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -42,8 +44,8 @@ public class KmeansTest {
                 // {"/datasets/data3.csv", 2},
                 // {"/datasets/data4.csv", 7},
                 // {"/datasets/data5.csv", 2},
-                {System.getProperty("user.dir") + "/src/main/resources/datasets/dataset3D.csv", 15},
-                {System.getProperty("user.dir") + "/src/main/resources/datasets/dataset2D.csv", 5},
+                // {System.getProperty("user.dir") + "/src/main/resources/datasets/dataset3D.csv", 15},
+                // {System.getProperty("user.dir") + "/src/main/resources/datasets/dataset2D.csv", 5},
                 {System.getProperty("user.dir") + "/src/main/resources/datasets/smalldataset2D.csv", 5}
             }
         );
@@ -125,5 +127,26 @@ public class KmeansTest {
 		Kmeans.concurrentKmeans(data, k);
         System.out.println("Time elapsed: " + (System.currentTimeMillis() - time) + "ms");
         //<--Run and mesuare code performance
+    }
+    /**
+     * Test convert table to points
+     */
+    @Test
+    public void testConvertTableToPoints() throws Exception{
+        ArrayList<List<String>> table = Utilities.loadFile(new File(path));
+        List<Kmeans.Point> points = Kmeans.getDataSets(table);
+        assertEquals(table.size(), points.size());
+        assertEquals(table.get(0).size(), points.get(0).size());
+    }
+    /**
+     * Test get clusters
+     */
+    @Test
+    public void testGetClusters() throws Exception{
+        System.out.println("Get clusters test");
+        List<Kmeans.Point> points = Kmeans.getDataSets(path);
+        Map<Integer, List<Kmeans.Point>> clusters = Kmeans.getClusters(points, data);
+        for(int i = 0; i < clusters.size(); i++)
+            System.out.println(clusters.get(i).size() + " ");
     }
 }
