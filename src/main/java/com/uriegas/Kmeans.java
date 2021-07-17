@@ -15,7 +15,7 @@ import java.util.concurrent.*;
 public class Kmeans{
   private static final int REPLICATION_FACTOR = 200;//For testing porpuses
   private static final int NUM_THREADS = 30;//Number of threads to use
-  private static final int MAX_RANDOM_VALUE = 10000;//Max random value to use
+  private static final int MAX_RANDOM_VALUE = 1000000;//Max random value to use
   /**
    * Generalization of a point.
    * @author Eduardo Uriegas
@@ -243,6 +243,9 @@ public class Kmeans{
     public static List<Point> initializeCentersplusplus(int k, List<Point> dataset){
         List<Point> centroids = new ArrayList<>(k);
         double[] currPoint = new double[dataset.get(0).point.length];
+        double[] distToClosestCentroid = new double[dataset.size()];
+        double[] weightedDistribution  = new double[dataset.size()];  // cumulative sum of squared distances
+
         for (int j = 0; j < k; j++) {//For each centroid
             //-->Get the first centroid randomly
             if(j == 0){
@@ -252,11 +255,28 @@ public class Kmeans{
             //<--Get the first centroid randomly
             else{
                 //-->Get the rest of the centroids using a probabilitic approach
-                // for(int l = 0; l < centroids.size(); l++)
-
+                for(int l = 0; l < dataset.size(); l++){
+                    double distance = dataset.get(l).getDistance(new Point(currPoint));
+                    if(j == 1)
+                        distToClosestCentroid[l] = distance;
+                    else  
+                        if(distance < distToClosestCentroid[l])
+                            distToClosestCentroid[l] = distance;
+                    if(l == 0)
+                        weightedDistribution[0] = distToClosestCentroid[0];
+                    else
+                        weightedDistribution[l] = weightedDistribution[l-1] + distToClosestCentroid[l];
+                }
+                double rand = Math.random() * weightedDistribution[dataset.size()-1];
+                for(int m = dataset.size()-1; m >= 0; m--){
+                    if(rand < weightedDistribution[m]){
+                        for(int n = 0; n < currPoint.length; n++)
+                            currPoint[n] = dataset.get(m).point[n];
+                        break;
+                    }
+                }
                 //<--Get the rest of the centroids using a probabilitic approach
             }
-
             centroids.add(new Point(currPoint));
         }
         return centroids;
@@ -412,8 +432,9 @@ public class Kmeans{
       System.out.println("Time elapsed: " + (System.currentTimeMillis() - start) + "ms");
       System.out.println("Parallelized version");
       start = System.currentTimeMillis();
-      concurrentKmeans(dataset, k);
+      List<Point> points = concurrentKmeans(dataset, k);
       System.out.println("Time elapsed: " + (System.currentTimeMillis() - start) + "ms");
+      printData(points);
       System.exit(0);
   }
     public static void printData(List<Point> dataset){
