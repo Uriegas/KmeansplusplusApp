@@ -65,8 +65,6 @@ public class MainApp extends Application {
             Optional<ButtonType> closeResponse = closeConfirmation.showAndWait();
 
             if (!ButtonType.OK.equals(closeResponse.get()))
-                event.consume();
-            else
                 Platform.exit();
         });
         //<--When trying to close window

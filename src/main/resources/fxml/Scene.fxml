@@ -77,14 +77,14 @@
                         <Insets left="5.0" right="5.0" />
                      </HBox.margin>
                   </Separator>
-                  <Button fx:id="applyKmeans" mnemonicParsing="false" text="Group">
+                  <Button fx:id="applyKmeans" mnemonicParsing="false" text="&gt;">
                      <HBox.margin>
                         <Insets left="6.0" right="6.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="plotCorrelation" mnemonicParsing="false" text="Correlation" />
+                  <Button fx:id="plotCorrelation" mnemonicParsing="false" text="Corr" />
                   <Separator opacity="0.0" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="about" mnemonicParsing="false" text="About">
+                  <Button fx:id="about" mnemonicParsing="false" text="+">
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>

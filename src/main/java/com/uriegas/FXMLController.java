@@ -134,7 +134,7 @@ public class FXMLController extends Window {
                 }));
                 Optional<String> k = popup.showAndWait();
                 //<--Show: select k dialog
-                if(k.isPresent()){
+
                 //-->Show kmeas++ aggrupation
                 try{
                     List<Kmeans.Point> dat = Kmeans.getDataSets(model.getTableData());
@@ -152,7 +152,6 @@ public class FXMLController extends Window {
                 }
                 //<--Show kmeas++ aggrupation
                 System.out.println("apply kmeans clicked, k is " + ( k.isPresent() ? k.get() : "nothig") );
-                }
         });
         about.setOnMouseClicked(e ->{//When about is clicked show explanation of the program
                 //-->Show about dialog
@@ -164,6 +163,7 @@ public class FXMLController extends Window {
         plotCorrelation.setOnMouseClicked(e ->{//When plot correlation is clicked show correlation plot
             System.out.println("plot correlation clicked");
             //-->Set the data
+            // createPopUp(e, model, "SelectVariables.fxml");
             //Quick fix for the set data: Create a choice box dialog
             ChoiceDialog<String> choiceBox = new ChoiceDialog<String>();
             choiceBox.getItems().addAll(this.model.getHeaders());
@@ -189,6 +189,7 @@ public class FXMLController extends Window {
             //<--Set the data
 
             //-->Show correlation plot
+            // createPopUp(e, model, "Plot.fxml");
             plotGraph();
             //<--Show correlation plot
         });
@@ -266,8 +267,6 @@ public class FXMLController extends Window {
         s.show();
     }
     public void plotClusters(Map<Integer, List<Kmeans.Point>> clusters){
-        model.setVariable1(model.getHeaders().get(0));
-        model.setVariable2(model.getHeaders().get(1));
         //Create the scatter plot with variable axises
         ScatterChart<Number, Number> chart = new ScatterChart<Number, Number>(
             new NumberAxis(
@@ -278,6 +277,9 @@ public class FXMLController extends Window {
                 model.getVariable2Min()*0.8,
                 model.getVariable2Max()*1.1, 
                 ((model.getVariable2Max() + model.getVariable2Min()) / 10)));
+        //Load data from the model
+		Number[] xData = (Number[]) model.getVariable1Data();
+		Number[] yData = (Number[]) model.getVariable2Data();
         //Create the scatter plot with variable axises
 		NumberAxis xAxis = new NumberAxis();
 		NumberAxis yAxis = new NumberAxis();
